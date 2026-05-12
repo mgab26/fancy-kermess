@@ -1660,25 +1660,21 @@
         creneau: SEL.slot.c,
       };
 
-      const ok = await post(payload);
+      // Optimistic UI — succès immédiat, push en arrière-plan
       resetBtn(btn, 'Valider');
+      cacheInvalidate();
+      SEL.slot.ins++;
+      SEL.slot.b.push({ p: prenom, n: nom, e: enfant, cl: classe });
+      DATA.stats.inscrits++;
+      if (SEL.slot.ins < SEL.slot.cap) DATA.stats.stands_incomplets = Math.max(0, DATA.stats.stands_incomplets);
+      updateHomeStats();
+      saveFormData();
+      document.getElementById('form-stand').reset();
+      showSuccess('🙌', 'Merci !',
+        `Tu es inscrit·e pour "${SEL.stand.nom}" à ${SEL.slot.c}.\nOn compte sur toi le ${CFG.EVENT.date.split('·')[0].trim()} !`);
 
-      if (ok) {
-        cacheInvalidate();
-        // Mise à jour locale optimiste
-        SEL.slot.ins++;
-        SEL.slot.b.push({ p: prenom, n: nom, e: enfant, cl: classe });
-        DATA.stats.inscrits++;
-        if (SEL.slot.ins < SEL.slot.cap) DATA.stats.stands_incomplets = Math.max(0, DATA.stats.stands_incomplets);
-        updateHomeStats();
-        saveFormData();
-
-        document.getElementById('form-stand').reset();
-        showSuccess('🙌', 'Merci !',
-          `Tu es inscrit·e pour "${SEL.stand.nom}" à ${SEL.slot.c}.\nOn compte sur toi le ${CFG.EVENT.date.split('·')[0].trim()} !`);
-      } else {
-        showToast('Erreur lors de l\'envoi — réessaie');
-      }
+      // Envoie à GAS en arrière-plan (fire and forget)
+      post(payload).catch(() => showToast('⚠️ Erreur de sauvegarde'));
     }
 
     /* ======================================================
@@ -1719,20 +1715,18 @@
         depot: DEPOT,
       };
 
-      const ok = await post(payload);
+      // Optimistic UI — succès immédiat, push en arrière-plan
       resetBtn(btn, 'Je m\'engage');
+      cacheInvalidate();
+      saveFormData();
+      document.getElementById('form-gateau').reset();
+      setGateauType('sucré');
+      setDepot('samedi');
+      showSuccess('🎂', 'Miam, merci !',
+        `Ton "${nomGateau}" (${GATEAU_TYPE}) est noté !\nDépôt : ${DEPOT === 'vendredi' ? 'vendredi soir' : 'samedi à 16h'}.`);
 
-      if (ok) {
-        cacheInvalidate();
-        saveFormData();
-        document.getElementById('form-gateau').reset();
-        setGateauType('sucré');
-        setDepot('samedi');
-        showSuccess('🎂', 'Miam, merci !',
-          `Ton "${nomGateau}" (${GATEAU_TYPE}) est noté !\nDépôt : ${DEPOT === 'vendredi' ? 'vendredi soir' : 'samedi à 16h'}.`);
-      } else {
-        showToast('Erreur lors de l\'envoi — réessaie');
-      }
+      // Envoie à GAS en arrière-plan (fire and forget)
+      post(payload).catch(() => showToast('⚠️ Erreur de sauvegarde'));
     }
 
     /* ======================================================
@@ -1805,22 +1799,20 @@
 
     async function deleteIns(id, tel, cardEl, listEl) {
       if (!confirm('Supprimer cette inscription ?')) return;
-      const ok = await post({ action: 'delete', id, telephone: tel });
-      if (ok) {
-        cardEl.style.transition = 'opacity .25s';
-        cardEl.style.opacity = '0';
-        setTimeout(() => {
-          cardEl.remove();
-          if (!listEl.children.length) {
-            listEl.classList.add('hidden');
-            document.getElementById('modify-empty').classList.remove('hidden');
-            document.getElementById('modify-hint').classList.add('hidden');
-          }
-        }, 260);
-        showToast('Inscription supprimée');
-      } else {
-        showToast('Erreur — réessaie');
-      }
+      // Animation immédiate (optimistic)
+      cardEl.style.transition = 'opacity .25s';
+      cardEl.style.opacity = '0';
+      setTimeout(() => {
+        cardEl.remove();
+        if (!listEl.children.length) {
+          listEl.classList.add('hidden');
+          document.getElementById('modify-empty').classList.remove('hidden');
+          document.getElementById('modify-hint').classList.add('hidden');
+        }
+      }, 260);
+      showToast('✓ Inscription supprimée');
+      // Supprime du GAS en arrière-plan
+      post({ action: 'delete', id, telephone: tel }).catch(() => showToast('⚠️ Erreur de suppression'));
     }
 
     /* ======================================================
