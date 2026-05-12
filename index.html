@@ -1,0 +1,1856 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#FBF5E6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <title>Kermesse 2026 — École de Couteron</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ===========================
+       VARIABLES & RESET
+    =========================== */
+    :root {
+      --cream: #FBF5E6;
+      --cream-dark: #EDE5CF;
+      --cream-mid: #F3ECD8;
+      --red: #C53030;
+      --red-dark: #9B2C2C;
+      --red-light: #FEE2E2;
+      --gold: #D97706;
+      --gold-light: #FEF3C7;
+      --navy: #1A2744;
+      --navy-light: #2D4068;
+      --gray-bg: #E2DBD0;
+      --gray-text: #8A8078;
+      --gray-dark: #5C5650;
+      --green: #059669;
+      --white: #FFFFFF;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 20px;
+      --shadow: 0 2px 16px rgba(26, 39, 68, .10);
+      --shadow-lg: 0 8px 40px rgba(26, 39, 68, .18);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-tap-highlight-color: transparent;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--cream);
+      color: var(--navy);
+      min-height: 100dvh;
+      max-width: 430px;
+      margin: 0 auto;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* ===========================
+       SCREENS
+    =========================== */
+    .screen {
+      display: none;
+      flex-direction: column;
+      min-height: 100dvh;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    /* ===========================
+       NAV BAR
+    =========================== */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      padding: 14px 20px 10px;
+      background: var(--cream);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .nav-back {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 0;
+      touch-action: manipulation;
+    }
+
+    .nav-back-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .nav-spacer {
+      flex: 1;
+    }
+
+    /* ===========================
+       TYPOGRAPHY
+    =========================== */
+    .hand {
+      font-family: 'Caveat', cursive;
+    }
+
+    /* ===========================
+       BUTTONS
+    =========================== */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: 50px;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      text-align: center;
+      transition: transform .12s, box-shadow .12s;
+      touch-action: manipulation;
+      letter-spacing: -.01em;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .btn-primary {
+      background: var(--red);
+      color: #fff;
+      box-shadow: 0 4px 0 var(--red-dark);
+    }
+
+    .btn-primary:active {
+      box-shadow: 0 2px 0 var(--red-dark);
+      transform: translateY(2px) scale(0.98);
+    }
+
+    .btn-secondary {
+      background: var(--gold);
+      color: #fff;
+      box-shadow: 0 4px 0 #B45309;
+    }
+
+    .btn-secondary:active {
+      box-shadow: 0 2px 0 #B45309;
+      transform: translateY(2px) scale(0.98);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--navy);
+      border: 2.5px solid var(--navy);
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* ===========================
+       FORM ELEMENTS
+    =========================== */
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--gray-text);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--white);
+      border: 1.5px solid var(--cream-dark);
+      border-radius: var(--radius-sm);
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      color: var(--navy);
+      outline: none;
+      transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--navy);
+    }
+
+    .form-select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8078' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 44px;
+      cursor: pointer;
+    }
+
+    /* ===========================
+       TOGGLE BUTTONS
+    =========================== */
+    .toggle-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 11px 16px;
+      border-radius: 50px;
+      border: 2px solid var(--cream-dark);
+      background: var(--white);
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-dark);
+      cursor: pointer;
+      transition: all .15s;
+      touch-action: manipulation;
+    }
+
+    .toggle-btn.active-gold {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #fff;
+    }
+
+    .toggle-btn.active-red {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    /* ===========================
+       SCREEN: HOME
+    =========================== */
+    #screen-home {
+      background: var(--cream);
+    }
+
+    .home-bunting {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 0 4px;
+      height: 32px;
+      overflow: hidden;
+    }
+
+    .bunting-flag {
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 18px solid;
+      position: relative;
+    }
+
+    .bunting-flag:nth-child(odd) {
+      border-top-color: var(--red);
+    }
+
+    .bunting-flag:nth-child(3n) {
+      border-top-color: var(--gold);
+    }
+
+    .bunting-flag:nth-child(4n+1) {
+      border-top-color: var(--navy);
+    }
+
+    .home-hero {
+      text-align: center;
+      padding: 12px 24px 0;
+    }
+
+    .home-tent-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .home-title {
+      font-family: 'Caveat', cursive;
+      font-size: 40px;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .home-date {
+      font-family: 'Caveat', cursive;
+      font-size: 21px;
+      color: var(--gray-dark);
+      margin: 4px 0 20px;
+    }
+
+    .home-banner {
+      background: var(--red);
+      color: #fff;
+      padding: 18px 24px;
+      text-align: center;
+    }
+
+    .home-banner-title {
+      font-family: 'Caveat', cursive;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    .home-banner-sub {
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 5px;
+      opacity: .9;
+    }
+
+    .home-tagline {
+      text-align: center;
+      font-size: 14px;
+      color: var(--gray-dark);
+      padding: 14px 24px 20px;
+      font-style: italic;
+    }
+
+    .home-actions {
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .home-footer {
+      margin-top: auto;
+      padding: 28px 24px 24px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gray-text);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    /* Demo badge */
+    .demo-badge {
+      display: inline-block;
+      background: var(--gold-light);
+      color: var(--gold);
+      border: 1.5px solid var(--gold);
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      margin-bottom: 10px;
+    }
+
+    /* ===========================
+       SCREEN: GRID
+    =========================== */
+    #screen-grid {
+      padding: 0;
+    }
+
+    .grid-header {
+      padding: 4px 20px 14px;
+    }
+
+    .grid-title {
+      font-family: 'Caveat', cursive;
+      font-size: 34px;
+      font-weight: 700;
+    }
+
+    .grid-subtitle {
+      font-size: 13px;
+      color: var(--gray-dark);
+      margin-top: 2px;
+    }
+
+    .grid-scroll {
+      overflow-x: auto;
+      flex: 1;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    table.grid-tbl {
+      width: 100%;
+      min-width: 340px;
+      border-collapse: collapse;
+    }
+
+    .grid-tbl thead th {
+      padding: 10px 6px;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+      background: var(--cream);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    .grid-tbl thead th.col-stand {
+      text-align: left;
+      padding-left: 20px;
+      font-family: 'Caveat', cursive;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold);
+      min-width: 130px;
+    }
+
+    .grid-tbl thead th.col-slot {
+      min-width: 72px;
+      color: var(--navy);
+    }
+
+    .grid-tbl thead th.col-slot::before {
+      content: '';
+    }
+
+    .grid-tbl tbody tr {
+      border-bottom: 1px solid var(--cream-dark);
+    }
+
+    .grid-tbl tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    .grid-tbl tbody td.td-name {
+      padding: 10px 8px 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.3;
+    }
+
+    .grid-tbl tbody td.td-slot {
+      padding: 6px 5px;
+      text-align: center;
+    }
+
+    .cell {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 58px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform .1s;
+      touch-action: manipulation;
+    }
+
+    .cell:active {
+      transform: scale(.92);
+    }
+
+    .cell-locked {
+      background: transparent;
+      color: var(--gray-text);
+      cursor: default;
+      font-size: 18px;
+    }
+
+    .cell-full {
+      background: var(--green);
+      color: #fff;
+      cursor: default;
+      font-weight: 800;
+    }
+
+    .cell-1left {
+      background: var(--gold);
+      color: #fff;
+    }
+
+    .cell-open {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .grid-more {
+      text-align: center;
+      padding: 14px 16px 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-text);
+      letter-spacing: .08em;
+    }
+
+    /* ===========================
+       BOTTOM SHEET
+    =========================== */
+    .backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(26, 39, 68, .42);
+      z-index: 50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .28s;
+    }
+
+    .backdrop.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .b-sheet {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(110%);
+      width: 100%;
+      max-width: 430px;
+      background: var(--cream);
+      border-radius: 24px 24px 0 0;
+      z-index: 51;
+      transition: transform .32s cubic-bezier(.32, .72, 0, 1);
+      max-height: 88vh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
+    }
+
+    .b-sheet.open {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .sheet-handle {
+      width: 40px;
+      height: 4px;
+      background: var(--cream-dark);
+      border-radius: 2px;
+      margin: 14px auto 22px;
+    }
+
+    .sheet-head {
+      padding: 0 24px 16px;
+    }
+
+    .sheet-loc {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--gray-text);
+      margin-bottom: 6px;
+    }
+
+    .sheet-places {
+      font-size: 15px;
+      color: var(--gray-dark);
+      margin-top: 8px;
+    }
+
+    .sheet-people {
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .person-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .person-name {
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .person-child {
+      font-size: 13px;
+      color: var(--gray-dark);
+      margin-top: 2px;
+    }
+
+    .open-card {
+      background: var(--gold-light);
+      border: 2px dashed var(--gold);
+      border-radius: var(--radius);
+      padding: 14px 18px;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: background .15s;
+    }
+
+    .open-card:active {
+      background: #FDE68A;
+    }
+
+    .open-card-label {
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--gold);
+    }
+
+    .open-card-sub {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .sheet-cta {
+      padding: 20px 24px 8px;
+    }
+
+    /* ===========================
+       SCREEN: FORM STAND
+    =========================== */
+    .form-body {
+      padding: 4px 24px 32px;
+      flex: 1;
+    }
+
+    .form-hed {
+      font-family: 'Caveat', cursive;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .form-sub {
+      font-size: 14px;
+      color: var(--gray-dark);
+      margin-bottom: 26px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .form-section {
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--gray-text);
+      margin: 20px 0 10px;
+    }
+
+    /* ===========================
+       SCREEN: SUCCESS
+    =========================== */
+    #screen-success {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 48px 32px;
+    }
+
+    .success-icon {
+      font-size: 72px;
+      margin-bottom: 24px;
+      line-height: 1;
+    }
+
+    .success-title {
+      font-family: 'Caveat', cursive;
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .success-text {
+      font-size: 16px;
+      color: var(--gray-dark);
+      line-height: 1.65;
+      margin-bottom: 36px;
+      max-width: 300px;
+    }
+
+    #success-btn {
+      max-width: 260px;
+    }
+
+    /* ===========================
+       SCREEN: MODIFY
+    =========================== */
+    .lookup-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .lookup-row .form-input {
+      flex: 1;
+    }
+
+    .lookup-row .btn {
+      width: auto;
+      padding: 14px 20px;
+      flex-shrink: 0;
+      font-size: 15px;
+    }
+
+    .modify-list {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modify-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .modify-card-info {
+      flex: 1;
+    }
+
+    .modify-type {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: var(--gray-text);
+    }
+
+    .modify-main {
+      font-weight: 700;
+      font-size: 16px;
+      margin-top: 2px;
+    }
+
+    .modify-sub {
+      font-size: 13px;
+      color: var(--gray-dark);
+      margin-top: 1px;
+    }
+
+    .modify-del {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-text);
+      font-size: 20px;
+      padding: 6px;
+      touch-action: manipulation;
+      line-height: 1;
+      border-radius: 50%;
+      transition: color .15s, background .15s;
+    }
+
+    .modify-del:hover {
+      color: var(--red);
+      background: var(--red-light);
+    }
+
+    .modify-empty {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--gray-text);
+      font-size: 15px;
+      display: none;
+    }
+
+    .modify-hint {
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-text);
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+
+    /* ===========================
+       LOADING OVERLAY
+    =========================== */
+    #loading {
+      position: fixed;
+      inset: 0;
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      gap: 18px;
+      transition: opacity .25s;
+    }
+
+    #loading.fade {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #loading.gone {
+      display: none;
+    }
+
+    .spinner {
+      width: 38px;
+      height: 38px;
+      border: 3px solid var(--cream-dark);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin .75s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-label {
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      color: var(--gray-dark);
+    }
+
+    /* ===========================
+       TOAST
+    =========================== */
+    #toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--navy);
+      color: #fff;
+      padding: 11px 20px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 300;
+      opacity: 0;
+      transition: all .28s;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ===========================
+       UTILS
+    =========================== */
+    .mt12 {
+      margin-top: 12px;
+    }
+
+    .mt20 {
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== LOADING ===== -->
+  <div id="loading">
+    <div class="spinner"></div>
+    <div class="loading-label">Chargement…</div>
+  </div>
+
+  <!-- ===== TOAST ===== -->
+  <div id="toast"></div>
+
+  <!-- ===== BACKDROP ===== -->
+  <div class="backdrop" id="backdrop" onclick="closeSheet()"></div>
+
+  <!-- ===== BOTTOM SHEET ===== -->
+  <div class="b-sheet" id="b-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-loc" id="sheet-loc"></div>
+      <div class="hand" style="font-size:32px; font-weight:700; line-height:1.1;" id="sheet-title"></div>
+      <div class="sheet-places" id="sheet-places"></div>
+    </div>
+    <div class="sheet-people" id="sheet-people"></div>
+    <div class="sheet-cta">
+      <button class="btn btn-primary" id="sheet-cta" onclick="goToStandForm()">Je prends cette place</button>
+    </div>
+  </div>
+
+
+  <!-- ========================
+     SCREEN 1 · ACCUEIL
+========================= -->
+  <div class="screen active" id="screen-home">
+
+    <!-- Bunting décoratif -->
+    <div class="home-bunting" id="bunting-flags" aria-hidden="true"></div>
+
+    <div class="home-hero">
+      <!-- Chapiteau SVG -->
+      <div class="home-tent-wrap">
+        <svg width="170" height="108" viewBox="0 0 170 108" fill="none" xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true">
+          <!-- Corde bunting -->
+          <path d="M22 48 Q55 58 85 28 Q115 58 148 48" stroke="#D97706" stroke-width="1.5" fill="none"
+            stroke-dasharray="0" />
+          <!-- Fanions bunting -->
+          <polygon points="32,48 38,56 44,48" fill="#C53030" />
+          <polygon points="54,54 60,62 66,54" fill="#D97706" />
+          <polygon points="79,33 85,41 91,33" fill="#1A2744" />
+          <polygon points="104,54 110,62 116,54" fill="#C53030" />
+          <polygon points="126,49 132,57 138,49" fill="#D97706" />
+
+          <!-- Tente gauche -->
+          <polygon points="22,96 4,96 13,56" fill="#C53030" />
+          <polygon points="22,96 13,56 31,56" fill="#FBF5E6" />
+          <polygon points="31,56 40,96 22,96" fill="#C53030" />
+          <line x1="4" y1="96" x2="40" y2="96" stroke="#9B2C2C" stroke-width="1.5" />
+          <line x1="13" y1="56" x2="13" y2="44" stroke="#9B2C2C" stroke-width="1.5" />
+          <circle cx="13" cy="42" r="3.5" fill="#D97706" />
+
+          <!-- Tente centrale (grande) -->
+          <polygon points="85,96 52,96 68,30" fill="#C53030" />
+          <polygon points="85,96 68,30 102,30" fill="#FBF5E6" />
+          <polygon points="102,30 118,96 85,96" fill="#C53030" />
+          <line x1="52" y1="96" x2="118" y2="96" stroke="#9B2C2C" stroke-width="1.5" />
+          <line x1="68" y1="30" x2="68" y2="14" stroke="#9B2C2C" stroke-width="1.5" />
+          <!-- Drapeau central -->
+          <polygon points="68,6 62,15 74,15" fill="#D97706" />
+          <!-- Rayures porte -->
+          <rect x="76" y="74" width="18" height="22" rx="9" fill="#9B2C2C" opacity=".5" />
+
+          <!-- Tente droite -->
+          <polygon points="148,96 130,96 139,56" fill="#C53030" />
+          <polygon points="148,96 139,56 157,56" fill="#FBF5E6" />
+          <polygon points="157,56 166,96 148,96" fill="#C53030" />
+          <line x1="130" y1="96" x2="166" y2="96" stroke="#9B2C2C" stroke-width="1.5" />
+          <line x1="157" y1="56" x2="157" y2="44" stroke="#9B2C2C" stroke-width="1.5" />
+          <circle cx="157" cy="42" r="3.5" fill="#D97706" />
+
+          <!-- Sol -->
+          <line x1="2" y1="98" x2="168" y2="98" stroke="#9B2C2C" stroke-width="2" opacity=".3" />
+        </svg>
+      </div>
+
+      <h1 class="home-title">Kermesse 2026</h1>
+      <p class="home-date" id="home-date">vendredi 26 juin · 16h45</p>
+    </div>
+
+    <div class="home-banner">
+      <div class="home-banner-title" id="home-banner-title">On a besoin de vous !</div>
+      <div class="home-banner-sub" id="home-banner-sub">Chargement…</div>
+    </div>
+
+    <p class="home-tagline">Une grille, une case, un tap. C'est tout.</p>
+
+    <div class="home-actions">
+      <div id="demo-notice" class="demo-badge hidden">Mode démo — données simulées</div>
+      <button class="btn btn-primary" onclick="showGrid()">Je tiens un stand <span
+          style="opacity:.75;font-weight:600">(45 min)</span></button>
+      <button class="btn btn-secondary" onclick="showScreen('screen-gateau')">J'apporte un gâteau</button>
+      <button class="btn btn-outline" onclick="showScreen('screen-modify')">Modifier mon inscription</button>
+    </div>
+
+    <div class="home-footer">École de Couteron · APE</div>
+  </div>
+
+
+  <!-- ========================
+     SCREEN 2 · GRILLE
+========================= -->
+  <div class="screen" id="screen-grid">
+    <nav class="nav-bar">
+      <button class="nav-back" onclick="showScreen('screen-home')">
+        <span class="nav-back-icon">←</span> Accueil
+      </button>
+      <span class="nav-spacer"></span>
+    </nav>
+
+    <div class="grid-header">
+      <h2 class="hand grid-title">La grille</h2>
+      <p class="grid-subtitle">Une case = un créneau. Tap sur une case libre.</p>
+    </div>
+
+    <div class="grid-scroll">
+      <table class="grid-tbl" id="grid-tbl">
+        <thead>
+          <tr>
+            <th class="col-stand">stand</th>
+            <th class="col-slot">16h45</th>
+            <th class="col-slot">17h30</th>
+            <th class="col-slot">18h15</th>
+          </tr>
+        </thead>
+        <tbody id="grid-body"></tbody>
+      </table>
+      <div class="grid-more" id="grid-more"></div>
+    </div>
+  </div>
+
+
+  <!-- ========================
+     SCREEN 4 · FORM STAND
+========================= -->
+  <div class="screen" id="screen-stand">
+    <nav class="nav-bar">
+      <button class="nav-back" id="stand-back" onclick="showScreen('screen-grid')">
+        <span class="nav-back-icon">←</span> <span id="stand-back-label">Grille</span>
+      </button>
+      <span class="nav-spacer"></span>
+    </nav>
+
+    <div class="form-body">
+      <h2 class="form-hed">Encore quelques infos</h2>
+      <p class="form-sub" id="stand-sub">On a déjà ton créneau — il manque juste tes coordonnées.</p>
+
+      <form id="form-stand" onsubmit="submitStand(event)">
+        <div class="form-group">
+          <label class="form-label">Prénom</label>
+          <input type="text" class="form-input" id="s-prenom" placeholder="Prénom" required autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nom</label>
+          <input type="text" class="form-input" id="s-nom" placeholder="Nom" required autocomplete="family-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Téléphone</label>
+          <input type="tel" class="form-input" id="s-tel" placeholder="06…" required autocomplete="tel" inputmode="tel">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prénom enfant <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
+          <input type="text" class="form-input" id="s-enfant" placeholder="—" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Classe <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
+          <select class="form-input form-select" id="s-classe">
+            <option value="">—</option>
+            <option value="GS">GS</option>
+            <option value="CP">CP</option>
+            <option value="CE1">CE1</option>
+            <option value="CE2">CE2</option>
+            <option value="CM1">CM1</option>
+            <option value="CM2">CM2</option>
+          </select>
+        </div>
+
+        <div class="mt20">
+          <button type="submit" class="btn btn-primary" id="s-submit">Valider</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================
+     SCREEN 5 · FORM GÂTEAU
+========================= -->
+  <div class="screen" id="screen-gateau">
+    <nav class="nav-bar">
+      <button class="nav-back" onclick="showScreen('screen-home')">
+        <span class="nav-back-icon">←</span> Accueil
+      </button>
+      <span class="nav-spacer"></span>
+    </nav>
+
+    <div class="form-body">
+      <h2 class="form-hed">J'apporte un gâteau 🎂</h2>
+      <p class="form-sub">Pour la buvette — sucré ou salé, fait maison.</p>
+
+      <form id="form-gateau" onsubmit="submitGateau(event)">
+        <div class="form-group">
+          <label class="form-label">Prénom — Nom</label>
+          <input type="text" class="form-input" id="g-prenomnom" placeholder="Prénom Nom" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Téléphone</label>
+          <input type="tel" class="form-input" id="g-tel" placeholder="06…" required autocomplete="tel" inputmode="tel">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Prénom enfant <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
+          <input type="text" class="form-input" id="g-enfant" placeholder="—" autocomplete="off">
+        </div>
+
+        <p class="form-section">Type</p>
+        <div class="toggle-group">
+          <button type="button" class="toggle-btn active-gold" id="tg-sucre"
+            onclick="setGateauType('sucré')">Sucré</button>
+          <button type="button" class="toggle-btn" id="tg-sale" onclick="setGateauType('salé')">Salé</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Nom du gâteau</label>
+          <input type="text" class="form-input" id="g-nom" placeholder="Tarte aux pommes" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Parts approx.</label>
+          <select class="form-input form-select" id="g-parts" required>
+            <option value="4">4 parts</option>
+            <option value="6">6 parts</option>
+            <option value="8" selected>8 parts</option>
+            <option value="10">10 parts</option>
+            <option value="12">12 parts</option>
+            <option value="16">16 parts</option>
+            <option value="20">20 parts ou +</option>
+          </select>
+        </div>
+
+        <p class="form-section">Dépôt</p>
+        <div class="toggle-group">
+          <button type="button" class="toggle-btn" id="tg-ven" onclick="setDepot('vendredi')">Vendredi soir</button>
+          <button type="button" class="toggle-btn active-gold" id="tg-sam" onclick="setDepot('samedi')">Samedi
+            16h</button>
+        </div>
+
+        <div class="mt12">
+          <button type="submit" class="btn btn-primary" id="g-submit">Je m'engage</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================
+     SCREEN · MODIFIER
+========================= -->
+  <div class="screen" id="screen-modify">
+    <nav class="nav-bar">
+      <button class="nav-back" onclick="showScreen('screen-home')">
+        <span class="nav-back-icon">←</span> Accueil
+      </button>
+      <span class="nav-spacer"></span>
+    </nav>
+
+    <div class="form-body">
+      <h2 class="form-hed">Mon inscription</h2>
+      <p class="form-sub">Entre ton numéro pour retrouver tes inscriptions.</p>
+
+      <div class="lookup-row">
+        <input type="tel" class="form-input" id="m-tel" placeholder="06…" autocomplete="tel" inputmode="tel">
+        <button type="button" class="btn btn-primary" onclick="lookup()">Chercher</button>
+      </div>
+
+      <div class="modify-list hidden" id="modify-list"></div>
+      <div class="modify-empty hidden" id="modify-empty">Aucune inscription trouvée pour ce numéro.</div>
+      <p class="modify-hint hidden" id="modify-hint">
+        Pour toute modification complexe,<br>contactez l'organisation de la kermesse.
+      </p>
+    </div>
+  </div>
+
+
+  <!-- ========================
+     SCREEN · SUCCÈS
+========================= -->
+  <div class="screen" id="screen-success">
+    <div class="success-icon" id="s-icon">🎉</div>
+    <h2 class="success-title" id="s-title">C'est noté !</h2>
+    <p class="success-text" id="s-text">Merci pour ton engagement. On se retrouve à la kermesse !</p>
+    <button class="btn btn-primary" id="success-btn" onclick="showScreen('screen-home')">Retour à l'accueil</button>
+  </div>
+
+
+  <!-- ===================================
+     JAVASCRIPT
+==================================== -->
+  <script>
+    /* ======================================================
+       CONFIG — À personnaliser avant de mettre en prod
+    ====================================================== */
+    const CFG = {
+      // URL de ton Google Apps Script déployé.
+      // Laisse vide pour rester en mode démo.
+      GAS_URL: 'https://script.google.com/macros/s/AKfycbwERiWWun0MV-QXQwQoXr5_3BjYifnpYBpXWwfDwtQYErSbC61zfnQiFE_FWiAmGoj1Rg/exec',
+
+      EVENT: {
+        titre: 'Kermesse 2026',
+        date: 'vendredi 26 juin · 16h45',
+        lieu: 'Centre aéré de Couteron',
+      },
+
+      CRENEAUX: ['16h45', '17h30', '18h15'],
+    };
+
+    /* ======================================================
+       DONNÉES MOCK (mode démo)
+    ====================================================== */
+    const MOCK = {
+      ok: true,
+      stats: { inscrits: 42, total_places: 67, stands_incomplets: 9 },
+      stands: [
+        {
+          id: 's0', nom: 'Caisse — Vente tickets',
+          slots: [
+            { c: '16h45', cap: 0, ins: 0, b: [] },
+            { c: '17h30', cap: 0, ins: 0, b: [] },
+            { c: '18h15', cap: 0, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's1', nom: 'Buvette',
+          slots: [
+            { c: '16h45', cap: 4, ins: 1, b: [{ p: 'Claire', n: 'Moreau', e: 'Paul', cl: 'CP' }] },
+            { c: '17h30', cap: 4, ins: 0, b: [] },
+            { c: '18h15', cap: 4, ins: 1, b: [{ p: 'Hélène', n: 'Petit', e: 'Lucie', cl: 'CE1' }] },
+          ]
+        },
+        {
+          id: 's2', nom: 'Chamboule-tout',
+          slots: [
+            { c: '16h45', cap: 2, ins: 2, b: [{ p: 'Marc', n: 'Dubois', e: 'Théo', cl: 'CM1' }, { p: 'Julie', n: 'Bernard', e: 'Lucie', cl: 'CE2' }] },
+            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Sophie', n: 'Laurent', e: '', cl: '' }] },
+            { c: '18h15', cap: 2, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's3', nom: 'Lancé tête de clown',
+          slots: [
+            { c: '16h45', cap: 2, ins: 0, b: [] },
+            { c: '17h30', cap: 2, ins: 0, b: [] },
+            { c: '18h15', cap: 2, ins: 1, b: [{ p: 'Antoine', n: 'Martin', e: 'Emma', cl: 'GS' }] },
+          ]
+        },
+        {
+          id: 's4', nom: 'Pêche aux canards',
+          slots: [
+            { c: '16h45', cap: 2, ins: 1, b: [{ p: 'Marie', n: 'Laurent', e: 'Léa', cl: 'CE2' }] },
+            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Sophie', n: 'Bernard', e: 'Tom', cl: 'CM1' }] },
+            { c: '18h15', cap: 2, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's5', nom: 'Maquillage',
+          slots: [
+            { c: '16h45', cap: 3, ins: 3, b: [{ p: 'Isabelle', n: 'Roux' }, { p: 'Nathalie', n: 'Simon' }, { p: 'Caroline', n: 'Dupont' }] },
+            { c: '17h30', cap: 3, ins: 1, b: [{ p: 'Laure', n: 'Girard', e: '', cl: '' }] },
+            { c: '18h15', cap: 3, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's6', nom: 'Stand créatif — clowns & masques',
+          slots: [
+            { c: '16h45', cap: 2, ins: 0, b: [] },
+            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Céline', n: 'Faure', e: '', cl: '' }] },
+            { c: '18h15', cap: 2, ins: 2, b: [{ p: 'Dominique', n: 'Thomas' }, { p: 'Véronique', n: 'Leroy' }] },
+          ]
+        },
+        {
+          id: 's7', nom: 'Toucher à l\'aveugle',
+          slots: [
+            { c: '16h45', cap: 0, ins: 0, b: [] },
+            { c: '17h30', cap: 0, ins: 0, b: [] },
+            { c: '18h15', cap: 0, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's8', nom: 'Grenouille tonneau',
+          slots: [
+            { c: '16h45', cap: 2, ins: 1, b: [{ p: 'Patrice', n: 'Michel', e: '', cl: '' }] },
+            { c: '17h30', cap: 2, ins: 0, b: [] },
+            { c: '18h15', cap: 2, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's9', nom: 'Jeu de massacre',
+          slots: [
+            { c: '16h45', cap: 2, ins: 0, b: [] },
+            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'François', n: 'Lambert', e: '', cl: '' }] },
+            { c: '18h15', cap: 2, ins: 2, b: [{ p: 'Pierre', n: 'Richard' }, { p: 'Sébastien', n: 'Morin' }] },
+          ]
+        },
+        {
+          id: 's10', nom: 'Tir à l\'arc — initiation',
+          slots: [
+            { c: '16h45', cap: 2, ins: 0, b: [] },
+            { c: '17h30', cap: 2, ins: 0, b: [] },
+            { c: '18h15', cap: 2, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's11', nom: 'Course en sac',
+          slots: [
+            { c: '16h45', cap: 2, ins: 1, b: [{ p: 'Sylvie', n: 'Blanc', e: '', cl: '' }] },
+            { c: '17h30', cap: 2, ins: 0, b: [] },
+            { c: '18h15', cap: 2, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's12', nom: 'Tombola — tirage',
+          slots: [
+            { c: '16h45', cap: 2, ins: 0, b: [] },
+            { c: '17h30', cap: 2, ins: 0, b: [] },
+            { c: '18h15', cap: 2, ins: 1, b: [{ p: 'Chloé', n: 'Renard', e: 'Nathan', cl: 'CP' }] },
+          ]
+        },
+        {
+          id: 's13', nom: 'Accueil & orientation',
+          slots: [
+            { c: '16h45', cap: 3, ins: 2, b: [{ p: 'Martine', n: 'Garnier' }, { p: 'Sandrine', n: 'Clement', e: 'Zoé', cl: 'CE2' }] },
+            { c: '17h30', cap: 3, ins: 0, b: [] },
+            { c: '18h15', cap: 3, ins: 0, b: [] },
+          ]
+        },
+        {
+          id: 's14', nom: 'Vente de glaces',
+          slots: [
+            { c: '16h45', cap: 2, ins: 0, b: [] },
+            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Émilie', n: 'Favre', e: '', cl: '' }] },
+            { c: '18h15', cap: 2, ins: 0, b: [] },
+          ]
+        },
+      ],
+    };
+
+    /* ======================================================
+       STATE
+    ====================================================== */
+    let DATA = null;   // données chargées
+    let SEL = null;   // { stand, slot } sélectionnés
+    let GATEAU_TYPE = 'sucré';
+    let DEPOT = 'samedi';
+    const DEMO = !CFG.GAS_URL;
+
+    /* ======================================================
+       CACHE localStorage (TTL 60 s)
+    ====================================================== */
+    const LS_KEY = 'kermesse_grid_v1';
+    const LS_TTL = 60 * 1000;
+
+    function cacheLoad() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (!raw) return null;
+        const { ts, data } = JSON.parse(raw);
+        return (Date.now() - ts < LS_TTL) ? data : null;
+      } catch { return null; }
+    }
+
+    function cacheSave(data) {
+      try { localStorage.setItem(LS_KEY, JSON.stringify({ ts: Date.now(), data })); }
+      catch {}
+    }
+
+    function cacheInvalidate() {
+      try { localStorage.removeItem(LS_KEY); } catch {}
+    }
+
+    /* ======================================================
+       INIT
+    ====================================================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      buildBunting();
+      document.getElementById('home-date').textContent = CFG.EVENT.date;
+
+      if (DEMO) {
+        DATA = MOCK;
+        document.getElementById('demo-notice').classList.remove('hidden');
+        updateHomeStats();
+        hideLoading();
+        return;
+      }
+
+      // Affiche les données en cache immédiatement, rafraîchit en arrière-plan
+      const cached = cacheLoad();
+      if (cached) {
+        DATA = cached;
+        updateHomeStats();
+        hideLoading();
+        fetchData(true); // silent background refresh
+      } else {
+        fetchData(false); // premier chargement, spinner visible
+      }
+    });
+
+    /* ======================================================
+       NAVIGATION
+    ====================================================== */
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function showGrid() {
+      renderGrid();
+      showScreen('screen-grid');
+    }
+
+    /* ======================================================
+       DATA FETCH
+    ====================================================== */
+    async function fetchData(background = false) {
+      try {
+        const fresh = await fetchJSONP(CFG.GAS_URL);
+        DATA = fresh;
+        cacheSave(fresh);
+        updateHomeStats();
+        // Rerender grille si elle est visible
+        if (document.getElementById('screen-grid').classList.contains('active')) {
+          renderGrid();
+        }
+      } catch {
+        if (!DATA) {
+          DATA = MOCK;
+          showToast('Données non disponibles — mode démo');
+          document.getElementById('demo-notice').classList.remove('hidden');
+        }
+      }
+      if (!background) hideLoading();
+    }
+
+    // JSONP — contourne le CORS de GAS (302 redirect)
+    function fetchJSONP(url) {
+      return new Promise((resolve, reject) => {
+        const name = '__gcb' + Date.now();
+        window[name] = data => { delete window[name]; script.remove(); resolve(data); };
+        const script = document.createElement('script');
+        script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + name;
+        script.onerror = () => { delete window[name]; script.remove(); reject(); };
+        document.head.appendChild(script);
+      });
+    }
+
+    /* ======================================================
+       HOME
+    ====================================================== */
+    function updateHomeStats() {
+      if (!DATA) return;
+      const { inscrits, total_places, stands_incomplets } = DATA.stats;
+      const manquants = total_places - inscrits;
+      document.getElementById('home-banner-sub').textContent =
+        `${manquants} bénévoles encore nécessaires · ${stands_incomplets} stands incomplets`;
+    }
+
+    /* ======================================================
+       GRILLE
+    ====================================================== */
+    function renderGrid() {
+      if (!DATA) return;
+      const tbody = document.getElementById('grid-body');
+      tbody.innerHTML = '';
+
+      DATA.stands.forEach(stand => {
+        const tr = document.createElement('tr');
+
+        const tdName = document.createElement('td');
+        tdName.className = 'td-name';
+        tdName.textContent = stand.nom;
+        tr.appendChild(tdName);
+
+        stand.slots.forEach(slot => {
+          const td = document.createElement('td');
+          td.className = 'td-slot';
+
+          const cell = document.createElement('div');
+          cell.className = 'cell';
+
+          if (slot.cap === 0) {
+            cell.classList.add('cell-locked');
+            cell.textContent = '×';
+          } else if (slot.ins >= slot.cap) {
+            cell.classList.add('cell-full');
+            cell.textContent = `${slot.ins}/${slot.cap}`;
+          } else {
+            const free = slot.cap - slot.ins;
+            cell.classList.add(free === 1 ? 'cell-1left' : 'cell-open');
+            cell.textContent = `${slot.ins}/${slot.cap}`;
+            cell.addEventListener('click', () => openSheet(stand, slot));
+          }
+
+          td.appendChild(cell);
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+
+      const more = document.getElementById('grid-more');
+      more.textContent = DATA.stands.length > 8
+        ? `↓ ${DATA.stands.length} stands au total ↓`
+        : '';
+    }
+
+    /* ======================================================
+       BOTTOM SHEET
+    ====================================================== */
+    const SLOT_ENDS = { '16h45': '17h30', '17h30': '18h15', '18h15': '19h00' };
+
+    function openSheet(stand, slot) {
+      SEL = { stand, slot };
+      const free = slot.cap - slot.ins;
+
+      document.getElementById('sheet-loc').textContent =
+        `${stand.nom.toUpperCase()} · ${slot.c} → ${SLOT_ENDS[slot.c] || '…'}`;
+
+      document.getElementById('sheet-title').textContent =
+        free === 1
+          ? `Il reste 1 place sur ${slot.cap}`
+          : `Il reste ${free} places sur ${slot.cap}`;
+
+      document.getElementById('sheet-places').textContent = '';
+
+      // Liste des bénévoles
+      const peopleEl = document.getElementById('sheet-people');
+      peopleEl.innerHTML = '';
+
+      (slot.b || []).forEach(bv => {
+        const card = document.createElement('div');
+        card.className = 'person-card';
+        const name = document.createElement('div');
+        name.className = 'person-name';
+        name.textContent = `${bv.p} ${bv.n}`;
+        card.appendChild(name);
+        if (bv.e || bv.cl) {
+          const child = document.createElement('div');
+          child.className = 'person-child';
+          child.textContent = [bv.e, bv.cl].filter(Boolean).join(' · ');
+          card.appendChild(child);
+        }
+        peopleEl.appendChild(card);
+      });
+
+      // Cartes places libres (max 4 affichées)
+      const shown = Math.min(free, 4 - (slot.b || []).length);
+      for (let i = 0; i < Math.max(shown, 1); i++) {
+        const card = document.createElement('div');
+        card.className = 'open-card';
+        card.innerHTML = `<div class="open-card-label">+ Toi ?</div><div class="open-card-sub">place libre</div>`;
+        card.addEventListener('click', goToStandForm);
+        peopleEl.appendChild(card);
+      }
+
+      document.getElementById('backdrop').classList.add('open');
+      document.getElementById('b-sheet').classList.add('open');
+    }
+
+    function closeSheet() {
+      document.getElementById('backdrop').classList.remove('open');
+      document.getElementById('b-sheet').classList.remove('open');
+    }
+
+    // Swipe down to close
+    let _touchY = 0;
+    document.getElementById('b-sheet').addEventListener('touchstart', e => {
+      _touchY = e.touches[0].clientY;
+    }, { passive: true });
+    document.getElementById('b-sheet').addEventListener('touchend', e => {
+      if (e.changedTouches[0].clientY - _touchY > 90) closeSheet();
+    }, { passive: true });
+
+    /* ======================================================
+       FORM STAND
+    ====================================================== */
+    function goToStandForm() {
+      closeSheet();
+      if (!SEL) return;
+      const { stand, slot } = SEL;
+      document.getElementById('stand-sub').textContent =
+        `${stand.nom} · ${slot.c} — il manque juste tes coordonnées.`;
+      showScreen('screen-stand');
+    }
+
+    async function submitStand(e) {
+      e.preventDefault();
+      const prenom = v('s-prenom');
+      const nom = v('s-nom');
+      const tel = v('s-tel');
+      const enfant = v('s-enfant');
+      const classe = v('s-classe');
+
+      if (!prenom || !nom || !tel) return;
+
+      const btn = document.getElementById('s-submit');
+      setLoading(btn, 'Envoi…');
+
+      const payload = {
+        action: 'inscription_stand',
+        prenom, nom, telephone: tel,
+        prenom_enfant: enfant, classe,
+        stand_id: SEL.stand.id,
+        stand_nom: SEL.stand.nom,
+        creneau: SEL.slot.c,
+      };
+
+      const ok = await post(payload);
+      resetBtn(btn, 'Valider');
+
+      if (ok) {
+        cacheInvalidate();
+        // Mise à jour locale optimiste
+        SEL.slot.ins++;
+        SEL.slot.b.push({ p: prenom, n: nom, e: enfant, cl: classe });
+        DATA.stats.inscrits++;
+        if (SEL.slot.ins < SEL.slot.cap) DATA.stats.stands_incomplets = Math.max(0, DATA.stats.stands_incomplets);
+        updateHomeStats();
+
+        document.getElementById('form-stand').reset();
+        showSuccess('🙌', 'Merci !',
+          `Tu es inscrit·e pour "${SEL.stand.nom}" à ${SEL.slot.c}.\nOn compte sur toi le ${CFG.EVENT.date.split('·')[0].trim()} !`);
+      } else {
+        showToast('Erreur lors de l\'envoi — réessaie');
+      }
+    }
+
+    /* ======================================================
+       FORM GÂTEAU
+    ====================================================== */
+    function setGateauType(t) {
+      GATEAU_TYPE = t;
+      document.getElementById('tg-sucre').className = 'toggle-btn' + (t === 'sucré' ? ' active-gold' : '');
+      document.getElementById('tg-sale').className = 'toggle-btn' + (t === 'salé' ? ' active-gold' : '');
+    }
+
+    function setDepot(d) {
+      DEPOT = d;
+      document.getElementById('tg-ven').className = 'toggle-btn' + (d === 'vendredi' ? ' active-gold' : '');
+      document.getElementById('tg-sam').className = 'toggle-btn' + (d === 'samedi' ? ' active-gold' : '');
+    }
+
+    async function submitGateau(e) {
+      e.preventDefault();
+      const prenomNom = v('g-prenomnom');
+      const tel = v('g-tel');
+      const enfant = v('g-enfant');
+      const nomGateau = v('g-nom');
+      const parts = v('g-parts');
+
+      if (!prenomNom || !tel || !nomGateau) return;
+
+      const btn = document.getElementById('g-submit');
+      setLoading(btn, 'Envoi…');
+
+      const payload = {
+        action: 'inscription_gateau',
+        prenom_nom: prenomNom, telephone: tel,
+        prenom_enfant: enfant,
+        type_gateau: GATEAU_TYPE,
+        nom_gateau: nomGateau,
+        parts,
+        depot: DEPOT,
+      };
+
+      const ok = await post(payload);
+      resetBtn(btn, 'Je m\'engage');
+
+      if (ok) {
+        cacheInvalidate();
+        document.getElementById('form-gateau').reset();
+        setGateauType('sucré');
+        setDepot('samedi');
+        showSuccess('🎂', 'Miam, merci !',
+          `Ton "${nomGateau}" (${GATEAU_TYPE}) est noté !\nDépôt : ${DEPOT === 'vendredi' ? 'vendredi soir' : 'samedi à 16h'}.`);
+      } else {
+        showToast('Erreur lors de l\'envoi — réessaie');
+      }
+    }
+
+    /* ======================================================
+       MODIFIER
+    ====================================================== */
+    async function lookup() {
+      const tel = v('m-tel');
+      if (!tel) return;
+
+      document.getElementById('modify-list').classList.add('hidden');
+      document.getElementById('modify-empty').classList.add('hidden');
+      document.getElementById('modify-hint').classList.add('hidden');
+
+      let results;
+      if (DEMO) {
+        await delay(600);
+        results = {
+          ok: true,
+          inscriptions: tel === '0600000000'
+            ? [
+              { id: 'demo1', type: 'stand', stand_nom: 'Buvette', creneau: '17h30' },
+              { id: 'demo2', type: 'gateau', nom_gateau: 'Tarte aux fraises', type_gateau: 'sucré', depot: 'samedi' },
+            ]
+            : [],
+        };
+      } else {
+        try {
+          results = await fetchJSONP(
+            CFG.GAS_URL + '?action=lookup&telephone=' + encodeURIComponent(tel)
+          );
+        } catch {
+          results = { ok: false };
+        }
+      }
+
+      if (!results?.ok || !results.inscriptions?.length) {
+        document.getElementById('modify-empty').classList.remove('hidden');
+        return;
+      }
+
+      const listEl = document.getElementById('modify-list');
+      listEl.innerHTML = '';
+
+      results.inscriptions.forEach(ins => {
+        const card = document.createElement('div');
+        card.className = 'modify-card';
+
+        const info = document.createElement('div');
+        info.className = 'modify-card-info';
+        info.innerHTML = `
+      <div class="modify-type">${ins.type === 'stand' ? 'Stand' : 'Gâteau'}</div>
+      <div class="modify-main">${ins.type === 'stand' ? ins.stand_nom : ins.nom_gateau}</div>
+      <div class="modify-sub">${ins.type === 'stand' ? ins.creneau : (ins.type_gateau + ' · dépôt ' + (ins.depot === 'vendredi' ? 'vendredi soir' : 'samedi'))}</div>
+    `;
+
+        const del = document.createElement('button');
+        del.className = 'modify-del';
+        del.textContent = '✕';
+        del.setAttribute('aria-label', 'Supprimer');
+        del.onclick = () => deleteIns(ins.id, tel, card, listEl);
+
+        card.appendChild(info);
+        card.appendChild(del);
+        listEl.appendChild(card);
+      });
+
+      listEl.classList.remove('hidden');
+      document.getElementById('modify-hint').classList.remove('hidden');
+    }
+
+    async function deleteIns(id, tel, cardEl, listEl) {
+      if (!confirm('Supprimer cette inscription ?')) return;
+      const ok = await post({ action: 'delete', id, telephone: tel });
+      if (ok) {
+        cardEl.style.transition = 'opacity .25s';
+        cardEl.style.opacity = '0';
+        setTimeout(() => {
+          cardEl.remove();
+          if (!listEl.children.length) {
+            listEl.classList.add('hidden');
+            document.getElementById('modify-empty').classList.remove('hidden');
+            document.getElementById('modify-hint').classList.add('hidden');
+          }
+        }, 260);
+        showToast('Inscription supprimée');
+      } else {
+        showToast('Erreur — réessaie');
+      }
+    }
+
+    /* ======================================================
+       API — tout via JSONP (GET) pour éviter les restrictions
+       CORS/no-cors depuis file:// et GitHub Pages
+    ====================================================== */
+    async function post(payload) {
+      if (DEMO) {
+        await delay(700);
+        return true;
+      }
+      try {
+        const data = await fetchJSONP(
+          CFG.GAS_URL + '?' + new URLSearchParams(payload)
+        );
+        return data.ok === true && data.wrote === true;
+      } catch {
+        return false;
+      }
+    }
+
+    /* ======================================================
+       SUCCESS SCREEN
+    ====================================================== */
+    function showSuccess(icon, title, text) {
+      document.getElementById('s-icon').textContent = icon;
+      document.getElementById('s-title').textContent = title;
+      document.getElementById('s-text').textContent = text;
+      showScreen('screen-success');
+    }
+
+    /* ======================================================
+       UI HELPERS
+    ====================================================== */
+    function hideLoading() {
+      const el = document.getElementById('loading');
+      el.classList.add('fade');
+      setTimeout(() => el.classList.add('gone'), 280);
+    }
+
+    let _toastT;
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      clearTimeout(_toastT);
+      _toastT = setTimeout(() => el.classList.remove('show'), 3200);
+    }
+
+    function v(id) { return document.getElementById(id)?.value?.trim() ?? ''; }
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    function setLoading(btn, label) {
+      btn.disabled = true;
+      btn._orig = btn.textContent;
+      btn.textContent = label;
+    }
+    function resetBtn(btn, label) {
+      btn.disabled = false;
+      btn.textContent = btn._orig ?? label;
+    }
+
+    /* ======================================================
+       BUNTING DÉCORATIF
+    ====================================================== */
+    function buildBunting() {
+      const colors = ['#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706'];
+      const wrap = document.getElementById('bunting-flags');
+      colors.forEach(col => {
+        const f = document.createElement('div');
+        f.className = 'bunting-flag';
+        f.style.borderTopColor = col;
+        wrap.appendChild(f);
+      });
+    }
+  </script>
+</body>
+
+</html>
