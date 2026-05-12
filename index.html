@@ -1391,6 +1391,7 @@
           nom: v('s-nom') || v('g-prenomnom')?.split(' ').slice(1).join(' ') || '',
           telephone: v('s-tel') || v('g-tel') || '',
           prenomEnfant: v('s-enfant') || v('g-enfant') || '',
+          classe: v('s-classe') || '',
         };
         localStorage.setItem(FORM_KEY, JSON.stringify(data));
       } catch {}
@@ -1403,6 +1404,7 @@
         const standNom = document.getElementById('s-nom');
         const standTel = document.getElementById('s-tel');
         const standEnfant = document.getElementById('s-enfant');
+        const standClasse = document.getElementById('s-classe');
         const gateauPrenomNom = document.getElementById('g-prenomnom');
         const gateauTel = document.getElementById('g-tel');
         const gateauEnfant = document.getElementById('g-enfant');
@@ -1411,6 +1413,7 @@
         if (standNom && data.nom) standNom.value = data.nom;
         if (standTel && data.telephone) standTel.value = data.telephone;
         if (standEnfant && data.prenomEnfant) standEnfant.value = data.prenomEnfant;
+        if (standClasse && data.classe) standClasse.value = data.classe;
         if (gateauPrenomNom && data.prenom && data.nom) {
           gateauPrenomNom.value = `${data.prenom} ${data.nom}`;
         }
