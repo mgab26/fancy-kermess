@@ -1380,6 +1380,46 @@
     }
 
     /* ======================================================
+       FORM DATA — sauvegarde locale (pour les inscriptions multiples)
+    ====================================================== */
+    const FORM_KEY = 'kermesse_form_data';
+
+    function saveFormData() {
+      try {
+        const data = {
+          prenom: v('s-prenom') || v('g-prenomnom')?.split(' ')[0] || '',
+          nom: v('s-nom') || v('g-prenomnom')?.split(' ').slice(1).join(' ') || '',
+          telephone: v('s-tel') || v('g-tel') || '',
+          prenomEnfant: v('s-enfant') || v('g-enfant') || '',
+        };
+        localStorage.setItem(FORM_KEY, JSON.stringify(data));
+      } catch {}
+    }
+
+    function loadFormData() {
+      try {
+        const data = JSON.parse(localStorage.getItem(FORM_KEY)) || {};
+        const standPrenom = document.getElementById('s-prenom');
+        const standNom = document.getElementById('s-nom');
+        const standTel = document.getElementById('s-tel');
+        const standEnfant = document.getElementById('s-enfant');
+        const gateauPrenomNom = document.getElementById('g-prenomnom');
+        const gateauTel = document.getElementById('g-tel');
+        const gateauEnfant = document.getElementById('g-enfant');
+
+        if (standPrenom && data.prenom) standPrenom.value = data.prenom;
+        if (standNom && data.nom) standNom.value = data.nom;
+        if (standTel && data.telephone) standTel.value = data.telephone;
+        if (standEnfant && data.prenomEnfant) standEnfant.value = data.prenomEnfant;
+        if (gateauPrenomNom && data.prenom && data.nom) {
+          gateauPrenomNom.value = `${data.prenom} ${data.nom}`;
+        }
+        if (gateauTel && data.telephone) gateauTel.value = data.telephone;
+        if (gateauEnfant && data.prenomEnfant) gateauEnfant.value = data.prenomEnfant;
+      } catch {}
+    }
+
+    /* ======================================================
        INIT
     ====================================================== */
     document.addEventListener('DOMContentLoaded', () => {
@@ -1412,6 +1452,10 @@
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+      // Auto-load form data pour les écrans de formulaire
+      if (id === 'screen-gateau' || id === 'screen-stand') {
+        setTimeout(loadFormData, 50);
+      }
       window.scrollTo(0, 0);
     }
 
@@ -1627,6 +1671,7 @@
         DATA.stats.inscrits++;
         if (SEL.slot.ins < SEL.slot.cap) DATA.stats.stands_incomplets = Math.max(0, DATA.stats.stands_incomplets);
         updateHomeStats();
+        saveFormData();
 
         document.getElementById('form-stand').reset();
         showSuccess('🙌', 'Merci !',
@@ -1679,6 +1724,7 @@
 
       if (ok) {
         cacheInvalidate();
+        saveFormData();
         document.getElementById('form-gateau').reset();
         setGateauType('sucré');
         setDepot('samedi');
