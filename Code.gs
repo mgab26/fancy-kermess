@@ -1,24 +1,67 @@
 /**
  * Code.gs — Backend Google Apps Script pour Kermesse 2026
  *
+ * ARCHITECTURE (Option B) :
+ * - Ce script est associé au Google Sheet "Kermesse Couteron Bénévoles"
+ * - buildGrid() lit les inscriptions directes depuis "Inscriptions bénévoles"
+ *   ET les inscriptions soumises via l'app depuis "Inscriptions_Stands"
+ * - Les écritures de l'app (inscription/suppression) vont dans Inscriptions_Stands
+ * - Les inscriptions directes dans le sheet sont visibles mais non-supprimables via l'app
+ *
  * DÉPLOIEMENT :
- * 1. Ouvre un Google Sheet neuf (ou existant)
+ * 1. Ouvre le Google Sheet "Kermesse Couteron Bénévoles"
  * 2. Extensions → Apps Script → colle ce code
- * 3. Lance setup() UNE SEULE FOIS pour créer les feuilles
+ * 3. Lance setup() UNE SEULE FOIS pour créer les feuilles internes
  * 4. Déployer → Nouveau déploiement
  *    - Type : Application Web
  *    - Exécuter en tant que : Moi
  *    - Accès : Tout le monde (anonyme)
- * 5. Copie l'URL obtenue → colle-la dans CFG.GAS_URL dans index.html
+ * 5. Copie l'URL → CFG.GAS_URL dans index.html
  */
 
 const SS = SpreadsheetApp.getActiveSpreadsheet();
 
 const SH = {
-  STANDS:  'Stands',
-  INSCRIP: 'Inscriptions_Stands',
-  GATEAUX: 'Inscriptions_Gateaux',
+  BENEV:   'Inscriptions bénévoles',  // feuille parent — lecture seule
+  INSCRIP: 'Inscriptions_Stands',     // inscriptions app — lecture/écriture
+  GATEAUX: 'Inscriptions_Gateaux',    // gâteaux app — lecture/écriture
 };
+
+/**
+ * Définition des stands : id, nom affiché, lignes dans "Inscriptions bénévoles" (1-indexed).
+ * La capacité par créneau = nombre de lignes du stand.
+ * Pour ajuster la capacité d'un stand, ajoute ou retire des numéros de lignes.
+ */
+const STAND_DEFS = [
+  { id: 's0',  nom: 'Entrée - Caisse - Vente tickets', rows: [7, 8] },
+  { id: 's1',  nom: 'Buvette',                          rows: [9, 10, 11, 12, 13] },
+  { id: 's2',  nom: 'Chamboule tout',                   rows: [19, 20] },
+  { id: 's3',  nom: 'Lancé tête de clown',              rows: [21] },
+  { id: 's4',  nom: 'Pêche au canard',                  rows: [22] },
+  { id: 's5',  nom: 'Maquillage',                       rows: [23, 24, 25] },
+  { id: 's6',  nom: 'Stand créatif - clowns et masques', rows: [26, 27, 28] },
+  { id: 's7',  nom: "Toucher à l'aveugle (x2)",         rows: [29] },
+  { id: 's8',  nom: 'Jeu en bois - Grenouille tonneau', rows: [30] },
+  { id: 's9',  nom: 'Jeu en bois - Le piège',           rows: [31] },
+  { id: 's10', nom: 'Jeu en bois - La Table élastique', rows: [32] },
+  { id: 's11', nom: 'Jeu en bois - Puissance 4 Géant',  rows: [33] },
+  { id: 's12', nom: 'Jeu en bois - Jeu des bâtonnets',  rows: [34] },
+  { id: 's13', nom: 'Jeu en bois - Parcours élec spirale', rows: [35] },
+  { id: 's14', nom: 'Jeu en bois - Jeu équilibre',      rows: [36] },
+  { id: 's15', nom: 'Jeu en bois - Aerobille',          rows: [37] },
+  { id: 's16', nom: 'Jeu en bois - Billard carrousel',  rows: [38] },
+  { id: 's17', nom: 'Jeu en bois - Cornhole',           rows: [39] },
+  { id: 's18', nom: 'Jeu en bois - La roulette',        rows: [40] },
+  { id: 's19', nom: 'Stand Tatouage',                   rows: [41, 42] },
+  { id: 's20', nom: 'Activités diverses cirque',        rows: [43, 44, 45] },
+];
+
+// Mapping créneaux → colonnes dans la feuille (0-indexed)
+const SLOT_COLS = [
+  { creneau: '16h45', colNom: 2, colEnfant: 3 },
+  { creneau: '17h30', colNom: 4, colEnfant: 5 },
+  { creneau: '18h15', colNom: 6, colEnfant: 7 },
+];
 
 /* ======================================================
    doGet — toutes les opérations via JSONP (GET)
@@ -28,15 +71,14 @@ function doGet(e) {
   let data;
 
   switch (p.action || 'grid') {
-    case 'grid':               data = getGrid();                        break;
-    case 'lookup':             data = lookupTel(p.telephone);           break;
-    case 'inscription_stand':  data = inscriptionStand(p);              break;
-    case 'inscription_gateau': data = inscriptionGateau(p);             break;
-    case 'delete':             data = deleteRow(p.id, p.telephone);     break;
+    case 'grid':               data = getGrid();                    break;
+    case 'lookup':             data = lookupTel(p.telephone);       break;
+    case 'inscription_stand':  data = inscriptionStand(p);          break;
+    case 'inscription_gateau': data = inscriptionGateau(p);         break;
+    case 'delete':             data = deleteRow(p.id, p.telephone); break;
     default:                   data = { ok: false, error: 'unknown' };
   }
 
-  // JSONP : le front passe ?callback=__gcbXXX
   if (p.callback) {
     return ContentService
       .createTextOutput(p.callback + '(' + JSON.stringify(data) + ')')
@@ -46,11 +88,10 @@ function doGet(e) {
 }
 
 /* ======================================================
-   doPost — inscriptions & suppression (URLSearchParams)
+   doPost — inscriptions & suppression
 ====================================================== */
 function doPost(e) {
   const p = e.parameter || {};
-
   switch (p.action) {
     case 'inscription_stand':  return json(inscriptionStand(p));
     case 'inscription_gateau': return json(inscriptionGateau(p));
@@ -60,14 +101,12 @@ function doPost(e) {
 }
 
 /* ======================================================
-   getGrid — avec cache 30 s (CacheService)
+   getGrid — avec cache 30 s
 ====================================================== */
 function getGrid() {
   const cache = CacheService.getScriptCache();
-  const hit   = cache.get('grid');
-  if (hit) {
-    try { return JSON.parse(hit); } catch {}
-  }
+  const hit = cache.get('grid');
+  if (hit) { try { return JSON.parse(hit); } catch {} }
   const data = buildGrid();
   try { cache.put('grid', JSON.stringify(data), 30); } catch {}
   return data;
@@ -77,38 +116,23 @@ function invalidateGrid() {
   try { CacheService.getScriptCache().remove('grid'); } catch {}
 }
 
+/* ======================================================
+   buildGrid — fusionne inscriptions sheet + inscriptions app
+====================================================== */
 function buildGrid() {
-  const shStands  = SS.getSheetByName(SH.STANDS);
-  const shInscrip = SS.getSheetByName(SH.INSCRIP);
-  if (!shStands) return { ok: false, error: 'sheet_missing' };
-
-  const standsRows = shStands.getDataRange().getValues();   // [id, nom, cap_16h45, cap_17h30, cap_18h15]
-  const inscRows   = shInscrip ? shInscrip.getDataRange().getValues() : [];
-
-  const CRENEAUX = ['16h45', '17h30', '18h15'];
-
-  // Map standId+créneau → liste bénévoles
-  const inscMap = {};
-  for (let i = 1; i < inscRows.length; i++) {
-    const [rowId, , prenom, nom, , prenomEnfant, classe, standId, creneau] = inscRows[i];
-    if (!standId || !creneau) continue;
-    const key = `${standId}__${creneau}`;
-    if (!inscMap[key]) inscMap[key] = [];
-    inscMap[key].push({ p: prenom, n: nom, e: prenomEnfant || '', cl: classe || '' });
-  }
+  const sheetMap = readSheetSignups();
+  const appMap   = readAppSignups();
 
   let totalPlaces = 0, totalInscrits = 0, standsIncomplets = 0;
   const stands = [];
 
-  for (let i = 1; i < standsRows.length; i++) {
-    const [id, nom, cap1, cap2, cap3] = standsRows[i];
-    if (!id || !nom) continue;
+  for (const def of STAND_DEFS) {
+    const cap = def.rows.length; // capacité par créneau = nb de lignes
 
-    const caps = [cap1, cap2, cap3].map(c => parseInt(c) || 0);
-    const slots = CRENEAUX.map((cr, ci) => {
-      const cap = caps[ci];
-      const b   = inscMap[`${id}__${cr}`] || [];
-      return { c: cr, cap, ins: b.length, b };
+    const slots = SLOT_COLS.map(({ creneau }) => {
+      const key  = `${def.id}__${creneau}`;
+      const b    = [...(sheetMap[key] || []), ...(appMap[key] || [])];
+      return { c: creneau, cap, ins: b.length, b };
     });
 
     const sp = slots.reduce((s, sl) => s + sl.cap, 0);
@@ -117,7 +141,7 @@ function buildGrid() {
     totalInscrits += si;
     if (si < sp) standsIncomplets++;
 
-    stands.push({ id: String(id), nom: String(nom), slots });
+    stands.push({ id: def.id, nom: def.nom, slots });
   }
 
   return {
@@ -128,18 +152,70 @@ function buildGrid() {
 }
 
 /* ======================================================
+   readSheetSignups — parse "Inscriptions bénévoles" (lecture seule)
+====================================================== */
+function readSheetSignups() {
+  const sh = SS.getSheetByName(SH.BENEV);
+  if (!sh) return {};
+
+  const allValues = sh.getDataRange().getValues();
+  const result = {};
+
+  for (const def of STAND_DEFS) {
+    for (const { creneau, colNom, colEnfant } of SLOT_COLS) {
+      const key = `${def.id}__${creneau}`;
+      result[key] = [];
+
+      for (const rowNum of def.rows) {
+        const row = allValues[rowNum - 1];
+        if (!row) continue;
+
+        const nomContact = String(row[colNom]    || '').trim();
+        const enfantInfo  = String(row[colEnfant] || '').trim();
+
+        if (nomContact) {
+          result[key].push({ p: nomContact, n: '', e: enfantInfo, cl: '', src: 'sheet' });
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+/* ======================================================
+   readAppSignups — lit Inscriptions_Stands
+====================================================== */
+function readAppSignups() {
+  const sh = SS.getSheetByName(SH.INSCRIP);
+  if (!sh) return {};
+
+  const rows = sh.getDataRange().getValues();
+  const result = {};
+
+  for (let i = 1; i < rows.length; i++) {
+    const [rowId, , prenom, nom, , prenomEnfant, classe, standId, creneau] = rows[i];
+    if (!standId || !creneau) continue;
+    const key = `${standId}__${creneau}`;
+    if (!result[key]) result[key] = [];
+    result[key].push({ id: rowId, p: prenom, n: nom, e: prenomEnfant || '', cl: classe || '', src: 'app' });
+  }
+
+  return result;
+}
+
+/* ======================================================
    inscriptionStand
 ====================================================== */
 function inscriptionStand(p) {
   const sh = SS.getSheetByName(SH.INSCRIP);
   if (!sh) return { ok: false, error: 'sheet_missing' };
 
-  // Vérifie qu'il reste de la place
   const grid  = getGrid();
   const stand = grid.stands.find(s => s.id === p.stand_id);
   if (!stand) return { ok: false, error: 'stand_not_found' };
   const slot = stand.slots.find(s => s.c === p.creneau);
-  if (!slot) return { ok: false, error: 'slot_not_found' };
+  if (!slot)  return { ok: false, error: 'slot_not_found' };
   if (slot.ins >= slot.cap) return { ok: false, error: 'full', message: 'Ce créneau est complet.' };
 
   const id = Utilities.getUuid();
@@ -185,7 +261,8 @@ function inscriptionGateau(p) {
 }
 
 /* ======================================================
-   lookupTel — trouve toutes les inscriptions d'un parent
+   lookupTel — cherche dans les inscriptions app
+   (les inscriptions directes dans le sheet n'ont pas de tel structuré)
 ====================================================== */
 function lookupTel(telephone) {
   if (!telephone) return { ok: false };
@@ -218,7 +295,8 @@ function lookupTel(telephone) {
 }
 
 /* ======================================================
-   deleteRow — supprime une inscription (vérifie le tel)
+   deleteRow — supprime uniquement les inscriptions app
+   (les inscriptions directes dans le sheet ne sont pas supprimables via l'app)
 ====================================================== */
 function deleteRow(id, telephone) {
   if (!id || !telephone) return { ok: false };
@@ -238,14 +316,13 @@ function deleteRow(id, telephone) {
     return false;
   }
 
-  // col 4 = téléphone dans Inscriptions_Stands ; col 3 dans Inscriptions_Gateaux
   if (tryDelete(SH.INSCRIP, 4)) { invalidateGrid(); return { ok: true, wrote: true }; }
   if (tryDelete(SH.GATEAUX, 3)) { invalidateGrid(); return { ok: true, wrote: true }; }
   return { ok: false, error: 'not_found' };
 }
 
 /* ======================================================
-   json — helper Content Service
+   json helper
 ====================================================== */
 function json(data) {
   return ContentService
@@ -257,46 +334,21 @@ function json(data) {
    setup — à lancer UNE SEULE FOIS depuis l'éditeur Apps Script
 ====================================================== */
 function setup() {
-  // Crée les feuilles manquantes
-  Object.values(SH).forEach(name => {
+  [SH.INSCRIP, SH.GATEAUX].forEach(name => {
     if (!SS.getSheetByName(name)) SS.insertSheet(name);
   });
 
-  // Feuille Stands — en-têtes + données initiales
-  const shStands = SS.getSheetByName(SH.STANDS);
-  if (shStands.getLastRow() === 0) {
-    shStands.appendRow(['id', 'nom', 'cap_16h45', 'cap_17h30', 'cap_18h15']);
-    [
-      ['s0',  'Caisse — Vente tickets',          0, 0, 0],
-      ['s1',  'Buvette',                          4, 4, 4],
-      ['s2',  'Chamboule-tout',                   2, 2, 2],
-      ['s3',  'Lancé tête de clown',              2, 2, 2],
-      ['s4',  'Pêche aux canards',                2, 2, 2],
-      ['s5',  'Maquillage',                       3, 3, 3],
-      ['s6',  'Stand créatif — clowns & masques', 2, 2, 2],
-      ['s7',  "Toucher à l'aveugle",              0, 0, 0],
-      ['s8',  'Grenouille tonneau',               2, 2, 2],
-      ['s9',  'Jeu de massacre',                  2, 2, 2],
-      ['s10', "Tir à l'arc — initiation",         2, 2, 2],
-      ['s11', 'Course en sac',                    2, 2, 2],
-      ['s12', 'Tombola — tirage',                 2, 2, 2],
-      ['s13', 'Accueil & orientation',            3, 3, 3],
-      ['s14', 'Vente de glaces',                  2, 2, 2],
-    ].forEach(row => shStands.appendRow(row));
-    Logger.log('Feuille Stands créée avec %s stands.', shStands.getLastRow() - 1);
-  }
-
-  // Feuille Inscriptions_Stands — en-têtes
   const shInscrip = SS.getSheetByName(SH.INSCRIP);
   if (shInscrip.getLastRow() === 0) {
-    shInscrip.appendRow(['id', 'timestamp', 'prenom', 'nom', 'telephone', 'prenom_enfant', 'classe', 'stand_id', 'creneau', 'stand_nom']);
+    shInscrip.appendRow(['id', 'timestamp', 'prenom', 'nom', 'telephone',
+                         'prenom_enfant', 'classe', 'stand_id', 'creneau', 'stand_nom']);
   }
 
-  // Feuille Inscriptions_Gateaux — en-têtes
   const shGateaux = SS.getSheetByName(SH.GATEAUX);
   if (shGateaux.getLastRow() === 0) {
-    shGateaux.appendRow(['id', 'timestamp', 'prenom_nom', 'telephone', 'prenom_enfant', 'type_gateau', 'nom_gateau', 'parts', 'depot']);
+    shGateaux.appendRow(['id', 'timestamp', 'prenom_nom', 'telephone',
+                         'prenom_enfant', 'type_gateau', 'nom_gateau', 'parts', 'depot']);
   }
 
-  Logger.log('✅ Setup terminé ! Tu peux maintenant déployer comme Web App.');
+  Logger.log('✅ Setup OK. Déploie maintenant comme Web App.');
 }
