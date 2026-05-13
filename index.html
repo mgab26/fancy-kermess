@@ -1059,7 +1059,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">Téléphone</label>
-          <input type="tel" class="form-input" id="s-tel" placeholder="06…" required autocomplete="tel" inputmode="tel">
+          <input type="tel" class="form-input" id="s-tel" placeholder="06…" required autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
         </div>
         <div class="form-group">
           <label class="form-label">Prénom enfant <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
@@ -1108,7 +1108,7 @@
         </div>
         <div class="form-group">
           <label class="form-label">Téléphone</label>
-          <input type="tel" class="form-input" id="g-tel" placeholder="06…" required autocomplete="tel" inputmode="tel">
+          <input type="tel" class="form-input" id="g-tel" placeholder="06…" required autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
         </div>
         <div class="form-group">
           <label class="form-label">Prénom enfant <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
@@ -1171,7 +1171,7 @@
       <p class="form-sub">Entre ton numéro pour retrouver tes inscriptions.</p>
 
       <div class="lookup-row">
-        <input type="tel" class="form-input" id="m-tel" placeholder="06…" autocomplete="tel" inputmode="tel">
+        <input type="tel" class="form-input" id="m-tel" placeholder="06…" autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
         <button type="button" class="btn btn-primary" onclick="lookup()">Chercher</button>
       </div>
 
@@ -1867,6 +1867,11 @@
 
     function v(id) { return document.getElementById(id)?.value?.trim() ?? ''; }
     function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // Validation téléphone — seulement chiffres, espaces et tirets
+    function sanitizePhone(input) {
+      input.value = input.value.replace(/[^\d\s\-]/g, '');
+    }
 
     function setLoading(btn, label) {
       btn.disabled = true;
