@@ -2291,7 +2291,7 @@
       resetBtn(btn, 'Valider mon inscription');
       cacheInvalidate();
       SEL.slot.ins++;
-      SEL.slot.b.push({ p: prenom, n: nom, e: enfant, cl: classe });
+      SEL.slot.b.push({ p: prenom, n: nom, e: enfant, cl: classe, tel: telClean });
       DATA.stats.inscrits++;
       updateHomeStats();
       saveFormData();
