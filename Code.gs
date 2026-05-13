@@ -3,28 +3,36 @@
  *
  * ARCHITECTURE :
  * - Ce script est associé au Google Sheet "Kermesse Couteron Bénévoles"
- * - Toutes les inscriptions stand (app + directes) vivent dans "Inscriptions bénévoles"
- * - L'app écrit directement dans les cellules du sheet (Nom + Contact + Enfant et classe)
- * - Seules les inscriptions avec un n° de téléphone dans la colonne Contact peuvent
- *   être supprimées via l'app
- * - Les gâteaux sont stockés dans "Inscriptions_Gateaux" (onglet séparé)
+ * - Tout est dans l'onglet "Inscriptions bénévoles" — aucun onglet créé
+ * - Stands  : rows 7–45, 3 colonnes par créneau (Nom · Contact · Enfant et classe)
+ * - Gâteaux : rows 51–90, colonnes C–G (Nom · Tel · Enfant · Classe · Gâteau)
+ * - Seules les inscriptions avec un n° de téléphone peuvent être supprimées via l'app
  *
  * DÉPLOIEMENT :
  * 1. Ouvre le Google Sheet "Kermesse Couteron Bénévoles"
- * 2. Extensions → Apps Script → colle ce code
- * 3. Lance setup() UNE SEULE FOIS pour créer l'onglet Inscriptions_Gateaux
- * 4. Déployer → Nouveau déploiement
+ * 2. Extensions → Apps Script → colle ce code (pas besoin de setup())
+ * 3. Déployer → Nouveau déploiement
  *    - Type : Application Web
  *    - Exécuter en tant que : Moi
  *    - Accès : Tout le monde (anonyme)
- * 5. Copie l'URL → CFG.GAS_URL dans index.html
+ * 4. Copie l'URL → CFG.GAS_URL dans index.html
  */
 
 const SS = SpreadsheetApp.getActiveSpreadsheet();
 
 const SH = {
-  BENEV:   'Inscriptions bénévoles',  // inscriptions stands — lecture/écriture
-  GATEAUX: 'Inscriptions_Gateaux',   // gâteaux — lecture/écriture
+  BENEV: 'Inscriptions bénévoles',  // seul onglet utilisé
+};
+
+// Table gâteaux dans "Inscriptions bénévoles" (0-indexed)
+const GATEAU = {
+  firstRow: 51,  // première ligne de données
+  lastRow:  90,  // dernière ligne de données (40 lignes max)
+  colNom:    2,  // C — Nom / Prénom
+  colTel:    4,  // E — N° tel  (D est une colonne vide)
+  colEnfant: 5,  // F — Prénom enfant
+  colClasse: 7,  // H — Classe  (G est une colonne vide)
+  colGateau: 8,  // I — Gâteau
 };
 
 /**
@@ -199,26 +207,32 @@ function inscriptionStand(p) {
 }
 
 /* ======================================================
-   inscriptionGateau
+   inscriptionGateau — écrit dans la table gâteaux de "Inscriptions bénévoles"
 ====================================================== */
 function inscriptionGateau(p) {
-  const sh = SS.getSheetByName(SH.GATEAUX);
+  const sh = SS.getSheetByName(SH.BENEV);
   if (!sh) return { ok: false, error: 'sheet_missing' };
 
-  const id = Utilities.getUuid();
-  sh.appendRow([
-    id,
-    new Date(),
-    p.prenom_nom    || '',
-    p.telephone     || '',
-    p.prenom_enfant || '',
-    p.type_gateau   || '',
-    p.nom_gateau    || '',
-    p.parts         || '',
-    p.depot         || '',
-  ]);
+  const allValues = sh.getDataRange().getValues();
 
-  return { ok: true, wrote: true, id };
+  // Trouver la première ligne vide dans la table gâteaux
+  for (let rowNum = GATEAU.firstRow; rowNum <= GATEAU.lastRow; rowNum++) {
+    const row = allValues[rowNum - 1];
+    if (!row) continue;
+    const nomVal = String(row[GATEAU.colNom] || '').trim();
+    if (!nomVal) {
+      sh.getRange(rowNum, GATEAU.colNom    + 1).setValue(p.prenom_nom    || '');
+      sh.getRange(rowNum, GATEAU.colTel    + 1).setValue(p.telephone     || '');
+      sh.getRange(rowNum, GATEAU.colEnfant + 1).setValue(p.prenom_enfant || '');
+      sh.getRange(rowNum, GATEAU.colClasse + 1).setValue(p.classe        || '');
+      sh.getRange(rowNum, GATEAU.colGateau + 1).setValue(p.nom_gateau    || '');
+
+      const id = `gateau__${rowNum}`;
+      return { ok: true, wrote: true, id };
+    }
+  }
+
+  return { ok: false, error: 'full', message: 'Le tableau des gâteaux est complet.' };
 }
 
 /* ======================================================
@@ -232,6 +246,8 @@ function lookupTel(telephone) {
   const sh = SS.getSheetByName(SH.BENEV);
   if (sh) {
     const allValues = sh.getDataRange().getValues();
+
+    // Stands
     for (const def of STAND_DEFS) {
       for (const { creneau, colNom, colContact } of SLOT_COLS) {
         for (const rowNum of def.rows) {
@@ -246,15 +262,16 @@ function lookupTel(telephone) {
         }
       }
     }
-  }
 
-  const shGateaux = SS.getSheetByName(SH.GATEAUX);
-  if (shGateaux) {
-    const rows = shGateaux.getDataRange().getValues();
-    for (let i = 1; i < rows.length; i++) {
-      const [rowId, , prenomNom, phone, , typeGateau, nomGateau, , depot] = rows[i];
-      if (String(phone).replace(/\s/g, '') === tel) {
-        inscriptions.push({ id: rowId, type: 'gateau', nom_gateau: nomGateau, type_gateau: typeGateau, depot });
+    // Gâteaux
+    for (let rowNum = GATEAU.firstRow; rowNum <= GATEAU.lastRow; rowNum++) {
+      const row = allValues[rowNum - 1];
+      if (!row) continue;
+      const telVal = String(row[GATEAU.colTel] || '').replace(/\s/g, '');
+      if (telVal === tel) {
+        const nomVal    = String(row[GATEAU.colNom]    || '').trim();
+        const gateauVal = String(row[GATEAU.colGateau] || '').trim();
+        inscriptions.push({ id: `gateau__${rowNum}`, type: 'gateau', nom_gateau: gateauVal, prenom_nom: nomVal });
       }
     }
   }
@@ -295,15 +312,23 @@ function deleteRow(id, telephone) {
     }
   }
 
-  // Suppression gâteau (UUID dans Inscriptions_Gateaux)
-  const shGateaux = SS.getSheetByName(SH.GATEAUX);
-  if (shGateaux) {
-    const rows = shGateaux.getDataRange().getValues();
-    for (let i = 1; i < rows.length; i++) {
-      if (String(rows[i][0]) === String(id) &&
-          String(rows[i][3]).replace(/\s/g, '') === tel) {
-        shGateaux.deleteRow(i + 1);
-        return { ok: true, wrote: true };
+  // Format ID pour les gâteaux : "gateau__rowNum"
+  if (String(id).startsWith('gateau__')) {
+    const rowNum = parseInt(String(id).split('__')[1], 10);
+    if (rowNum >= GATEAU.firstRow && rowNum <= GATEAU.lastRow) {
+      const sh = SS.getSheetByName(SH.BENEV);
+      if (sh) {
+        const telVal = String(
+          sh.getRange(rowNum, GATEAU.colTel + 1).getValue() || ''
+        ).replace(/\s/g, '');
+        if (telVal === tel) {
+          sh.getRange(rowNum, GATEAU.colNom    + 1).clearContent();
+          sh.getRange(rowNum, GATEAU.colTel    + 1).clearContent();
+          sh.getRange(rowNum, GATEAU.colEnfant + 1).clearContent();
+          sh.getRange(rowNum, GATEAU.colClasse + 1).clearContent();
+          sh.getRange(rowNum, GATEAU.colGateau + 1).clearContent();
+          return { ok: true, wrote: true };
+        }
       }
     }
   }
@@ -321,16 +346,13 @@ function json(data) {
 }
 
 /* ======================================================
-   setup — à lancer UNE SEULE FOIS depuis l'éditeur Apps Script
+   setup — vérifie que le sheet "Inscriptions bénévoles" existe
 ====================================================== */
 function setup() {
-  if (!SS.getSheetByName(SH.GATEAUX)) SS.insertSheet(SH.GATEAUX);
-
-  const shGateaux = SS.getSheetByName(SH.GATEAUX);
-  if (shGateaux.getLastRow() === 0) {
-    shGateaux.appendRow(['id', 'timestamp', 'prenom_nom', 'telephone',
-                         'prenom_enfant', 'type_gateau', 'nom_gateau', 'parts', 'depot']);
+  const sh = SS.getSheetByName(SH.BENEV);
+  if (!sh) {
+    Logger.log('❌ Onglet "' + SH.BENEV + '" introuvable. Vérifie le nom exact.');
+    return;
   }
-
-  Logger.log('✅ Setup OK. Déploie maintenant comme Web App.');
+  Logger.log('✅ Sheet OK. Déploie maintenant comme Web App.');
 }

@@ -402,6 +402,43 @@
       color: #fff;
     }
 
+    .chorale-warning {
+      background: #FFF8E1;
+      border: 1.5px solid #F9A825;
+      color: #5D4037;
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+
+    .gateau-nom-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .gateau-type-pills {
+      display: flex;
+      gap: 6px;
+    }
+    .gateau-pill {
+      padding: 4px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gold-main);
+      background: transparent;
+      color: var(--gold-main);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .gateau-pill.active-gold {
+      background: var(--gold-main);
+      color: #fff;
+    }
+
     /* ============================================================
        SCREEN: HOME
     ============================================================ */
@@ -1716,13 +1753,22 @@
             <label class="form-label">Classe</label>
             <select class="form-input form-select" id="s-classe">
               <option value="">—</option>
-              <option value="GS">GS</option>
-              <option value="CP">CP</option>
-              <option value="CE1">CE1</option>
-              <option value="CE2">CE2</option>
-              <option value="CM1">CM1</option>
-              <option value="CM2">CM2</option>
+              <optgroup label="Maternelle">
+                <option value="PS">PS</option>
+                <option value="MS">MS</option>
+                <option value="GS">GS</option>
+              </optgroup>
+              <optgroup label="Élémentaire">
+                <option value="CP">CP</option>
+                <option value="CE1">CE1</option>
+                <option value="CE2">CE2</option>
+                <option value="CM1">CM1</option>
+                <option value="CM2">CM2</option>
+              </optgroup>
             </select>
+            <div id="chorale-warning" class="chorale-warning hidden">
+              ⚠️ Attention aux parents de l'élémentaire qui seront à la CHORALE
+            </div>
           </div>
         </div>
 
@@ -1764,33 +1810,39 @@
             <label class="form-label">Prénom enfant <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
             <input type="text" class="form-input" id="g-enfant" placeholder="—" autocomplete="off">
           </div>
+          <div class="form-group">
+            <label class="form-label">Classe <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
+            <select class="form-input form-select" id="g-classe">
+              <option value="">—</option>
+              <optgroup label="Maternelle">
+                <option value="PS">PS</option>
+                <option value="MS">MS</option>
+                <option value="GS">GS</option>
+              </optgroup>
+              <optgroup label="Élémentaire">
+                <option value="CP">CP</option>
+                <option value="CE1">CE1</option>
+                <option value="CE2">CE2</option>
+                <option value="CM1">CM1</option>
+                <option value="CM2">CM2</option>
+              </optgroup>
+            </select>
+          </div>
         </div>
 
         <div class="form-card">
           <div class="form-card-label">Le gâteau</div>
           <div class="form-group">
-            <label class="form-label">Type</label>
-            <div class="toggle-group">
-              <button type="button" class="toggle-btn active-gold" id="tg-sucre"
-                onclick="setGateauType('sucré')">Sucré</button>
-              <button type="button" class="toggle-btn" id="tg-sale" onclick="setGateauType('salé')">Salé</button>
-            </div>
-          </div>
-          <div class="form-group">
             <label class="form-label">Nom du gâteau</label>
-            <input type="text" class="form-input" id="g-nom" placeholder="Tarte aux pommes" required autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Parts approx.</label>
-            <select class="form-input form-select" id="g-parts" required>
-              <option value="4">4 parts</option>
-              <option value="6">6 parts</option>
-              <option value="8" selected>8 parts</option>
-              <option value="10">10 parts</option>
-              <option value="12">12 parts</option>
-              <option value="16">16 parts</option>
-              <option value="20">20 parts ou +</option>
-            </select>
+            <div class="gateau-nom-row">
+              <div class="gateau-type-pills">
+                <button type="button" class="gateau-pill active-gold" id="tg-sucre"
+                  onclick="setGateauType('sucré')">Sucré</button>
+                <button type="button" class="gateau-pill" id="tg-sale"
+                  onclick="setGateauType('salé')">Salé</button>
+              </div>
+              <input type="text" class="form-input" id="g-nom" placeholder="Tarte aux pommes" required autocomplete="off">
+            </div>
           </div>
         </div>
 
@@ -1868,7 +1920,7 @@
        CONFIG
     ====================================================== */
     const CFG = {
-      GAS_URL: 'https://script.google.com/macros/s/AKfycbwERiWWun0MV-QXQwQoXr5_3BjYifnpYBpXWwfDwtQYErSbC61zfnQiFE_FWiAmGoj1Rg/exec',
+      GAS_URL: 'https://script.google.com/macros/s/AKfycbz55U62DxltjGay47XCPWUf-TGYczdpB6VY4Sdy9Lhe5nU9YiO0SWmQSjDDB0k7MFzbMw/exec',
 
       EVENT: {
         titre: 'Kermesse 2026',
@@ -1952,7 +2004,7 @@
           nom: v('s-nom') || v('g-prenomnom')?.split(' ').slice(1).join(' ') || '',
           telephone: v('s-tel') || v('g-tel') || '',
           prenomEnfant: v('s-enfant') || v('g-enfant') || '',
-          classe: v('s-classe') || '',
+          classe: v('s-classe') || v('g-classe') || '',
         };
         localStorage.setItem(FORM_KEY, JSON.stringify(data));
       } catch { }
@@ -1972,7 +2024,9 @@
         }
         if (data.classe) {
           const sc = document.getElementById('s-classe');
+          const gc = document.getElementById('g-classe');
           if (sc && !sc.value) sc.value = data.classe;
+          if (gc && !gc.value) gc.value = data.classe;
         }
         const gp = document.getElementById('g-prenomnom');
         const gt = document.getElementById('g-tel');
@@ -2178,6 +2232,13 @@
     /* ======================================================
        FORM STAND
     ====================================================== */
+    const ELEMENTAIRE = ['CP', 'CE1', 'CE2', 'CM1', 'CM2'];
+
+    function checkChoraleWarning() {
+      const warn = document.getElementById('chorale-warning');
+      if (warn) warn.classList.toggle('hidden', SEL?.slot?.c !== '16h45');
+    }
+
     function goToStandForm() {
       closeSheet();
       if (!SEL) return;
@@ -2193,6 +2254,7 @@
       document.getElementById('stand-sub').textContent =
         `${stand.nom} · ${slot.c} — il manque juste tes coordonnées.`;
       showScreen('screen-stand');
+      checkChoraleWarning();
     }
 
     async function submitStand(e) {
@@ -2203,6 +2265,16 @@
       const enfant = v('s-enfant');
       const classe = v('s-classe');
       if (!prenom || !nom || !tel) return;
+
+      const telClean = tel.replace(/\s/g, '');
+      const alreadyOnSlot = DATA?.stands.some(s =>
+        s.slots.some(sl => sl.c === SEL.slot.c &&
+          sl.b.some(b => b.tel && b.tel.replace(/\s/g, '') === telClean))
+      );
+      if (alreadyOnSlot) {
+        showToast(`Tu as déjà une inscription sur le créneau ${SEL.slot.c}.`);
+        return;
+      }
 
       const btn = document.getElementById('s-submit');
       setLoading(btn, 'Envoi…');
@@ -2237,8 +2309,8 @@
     ====================================================== */
     function setGateauType(t) {
       GATEAU_TYPE = t;
-      document.getElementById('tg-sucre').className = 'toggle-btn' + (t === 'sucré' ? ' active-gold' : '');
-      document.getElementById('tg-sale').className = 'toggle-btn' + (t === 'salé' ? ' active-gold' : '');
+      document.getElementById('tg-sucre').className = 'gateau-pill' + (t === 'sucré' ? ' active-gold' : '');
+      document.getElementById('tg-sale').className = 'gateau-pill' + (t === 'salé' ? ' active-gold' : '');
     }
 
     function setDepot(d) {
@@ -2252,20 +2324,22 @@
       const prenomNom = v('g-prenomnom');
       const tel = v('g-tel');
       const enfant = v('g-enfant');
+      const classe = v('g-classe');
       const nomGateau = v('g-nom');
-      const parts = v('g-parts');
       if (!prenomNom || !tel || !nomGateau) return;
 
       const btn = document.getElementById('g-submit');
       setLoading(btn, 'Envoi…');
 
+      const tag = GATEAU_TYPE === 'salé' ? '[Salé]' : '[Sucré]';
+      const nomGateauTagged = `${tag} ${nomGateau}`;
+
       const payload = {
         action: 'inscription_gateau',
         prenom_nom: prenomNom, telephone: tel,
         prenom_enfant: enfant,
-        type_gateau: GATEAU_TYPE,
-        nom_gateau: nomGateau,
-        parts,
+        classe,
+        nom_gateau: nomGateauTagged,
         depot: DEPOT,
       };
 
@@ -2277,7 +2351,7 @@
       setDepot('samedi');
 
       showSuccess('🎂', 'Miam, merci !',
-        `${nomGateau} · ${GATEAU_TYPE} · ${parts} parts`,
+        nomGateauTagged,
         `Dépôt : ${DEPOT === 'vendredi' ? 'vendredi soir' : 'samedi à 16h'}.`);
 
       post(payload).catch(() => showToast('⚠️ Erreur de sauvegarde'));
