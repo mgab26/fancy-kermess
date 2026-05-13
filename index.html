@@ -1739,6 +1739,9 @@
       const tel = v('m-tel');
       if (!tel) return;
 
+      const btn = document.querySelector('#screen-modify button[onclick="lookup()"]');
+      setLoading(btn, 'Cherche…');
+
       document.getElementById('modify-list').classList.add('hidden');
       document.getElementById('modify-empty').classList.add('hidden');
       document.getElementById('modify-hint').classList.add('hidden');
@@ -1764,6 +1767,8 @@
           results = { ok: false };
         }
       }
+
+      resetBtn(btn, 'Chercher');
 
       if (!results?.ok || !results.inscriptions?.length) {
         document.getElementById('modify-empty').classList.remove('hidden');
