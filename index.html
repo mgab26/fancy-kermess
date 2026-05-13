@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#FBF5E6">
+  <meta name="theme-color" content="#F7F1E3">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Kermesse 2026 — École de Couteron</title>
@@ -14,77 +14,126 @@
     href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;500;600;700;800&display=swap"
     rel="stylesheet">
   <style>
-    /* ===========================
-       VARIABLES & RESET
-    =========================== */
+    /* ============================================================
+       DESIGN SYSTEM — Kermesse 2026
+       Palette : Parchment · Blanc · Rouge profond · Or chaud · Navy encre
+    ============================================================ */
     :root {
-      --cream: #FBF5E6;
-      --cream-dark: #EDE5CF;
-      --cream-mid: #F3ECD8;
-      --red: #C53030;
-      --red-dark: #9B2C2C;
-      --red-light: #FEE2E2;
-      --gold: #D97706;
-      --gold-light: #FEF3C7;
-      --navy: #1A2744;
-      --navy-light: #2D4068;
-      --gray-bg: #E2DBD0;
-      --gray-text: #8A8078;
-      --gray-dark: #5C5650;
-      --green: #059669;
-      --white: #FFFFFF;
-      --radius: 12px;
-      --radius-sm: 8px;
-      --radius-lg: 20px;
-      --shadow: 0 2px 16px rgba(26, 39, 68, .10);
-      --shadow-lg: 0 8px 40px rgba(26, 39, 68, .18);
+      /* SURFACES (3 plans) */
+      --parchment:      #F7F1E3;
+      --parchment-deep: #EDE5D0;
+      --surface:        #FFFFFF;
+      --surface-warm:   #FFF8EC;
+
+      /* RED */
+      --red-ink:    #8C1F1F;
+      --red-main:   #B82C2C;
+      --red-bright: #D04040;
+      --red-tint:   #FBEAEA;
+
+      /* GOLD */
+      --gold-ink:   #8B5209;
+      --gold-main:  #C47A1A;
+      --gold-warm:  #E8912C;
+      --gold-tint:  #FEF3DC;
+
+      /* NAVY */
+      --navy-ink:   #141E35;
+      --navy-mid:   #2A3A5C;
+      --navy-muted: #5B6B8A;
+      --navy-ghost: #EEF1F6;
+
+      /* GREEN */
+      --green-main: #1A7A4A;
+      --green-tint: #E8F5EE;
+
+      /* COMPAT aliases for JS-generated HTML classes */
+      --cream:       var(--parchment);
+      --cream-dark:  var(--parchment-deep);
+      --cream-mid:   #F3ECD8;
+      --red:         var(--red-main);
+      --red-dark:    var(--red-ink);
+      --red-light:   var(--red-tint);
+      --gold:        var(--gold-main);
+      --gold-light:  var(--gold-tint);
+      --navy:        var(--navy-ink);
+      --navy-light:  var(--navy-mid);
+      --gray-bg:     var(--parchment-deep);
+      --gray-text:   var(--navy-muted);
+      --gray-dark:   var(--navy-mid);
+      --green:       var(--green-main);
+      --white:       var(--surface);
+
+      /* RADIUS */
+      --r-sm:   8px;
+      --r-md:   12px;
+      --r-lg:   16px;
+      --r-xl:   24px;
+      --r-full: 50px;
+      /* compat */
+      --radius:      var(--r-md);
+      --radius-sm:   var(--r-sm);
+      --radius-md:   var(--r-md);
+      --radius-lg:   var(--r-lg);
+      --radius-xl:   var(--r-xl);
+      --radius-full: var(--r-full);
+
+      /* SHADOWS — 4 niveaux d'élévation */
+      --sh-1: 0 1px 3px rgba(20,30,53,.05), 0 1px 2px rgba(20,30,53,.04);
+      --sh-2: 0 2px 8px rgba(20,30,53,.08), 0 1px 3px rgba(20,30,53,.04);
+      --sh-3: 0 8px 24px rgba(20,30,53,.12), 0 2px 8px rgba(20,30,53,.05);
+      --sh-4: 0 24px 56px rgba(20,30,53,.20), 0 8px 24px rgba(20,30,53,.10);
+      /* compat */
+      --shadow:       var(--sh-2);
+      --shadow-xs:    0 1px 2px rgba(20,30,53,.06);
+      --shadow-sm:    var(--sh-1);
+      --shadow-md:    var(--sh-2);
+      --shadow-lg:    var(--sh-4);
+      --shadow-hover: 0 6px 20px rgba(20,30,53,.14);
+
+      /* EASING */
+      --spring:       cubic-bezier(0.34, 1.56, 0.64, 1);
+      --spring-heavy: cubic-bezier(0.22, 1.8, 0.36, 1);
+      --ease-out:     cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring:  var(--spring);
     }
 
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-    html {
-      -webkit-tap-highlight-color: transparent;
-      scroll-behavior: smooth;
-    }
+    html { -webkit-tap-highlight-color: transparent; }
 
     body {
       font-family: 'Nunito', sans-serif;
-      background: var(--cream);
-      color: var(--navy);
+      background: var(--parchment);
+      color: var(--navy-ink);
       min-height: 100dvh;
       max-width: 430px;
       margin: 0 auto;
       overflow-x: hidden;
-      position: relative;
     }
 
-    /* ===========================
+    /* ============================================================
        SCREENS
-    =========================== */
+    ============================================================ */
     .screen {
       display: none;
       flex-direction: column;
       min-height: 100dvh;
     }
+    .screen.active { display: flex; }
 
-    .screen.active {
-      display: flex;
-    }
-
-    /* ===========================
+    /* ============================================================
        NAV BAR
-    =========================== */
+    ============================================================ */
     .nav-bar {
       display: flex;
       align-items: center;
-      padding: 14px 20px 10px;
-      background: var(--cream);
+      padding: 16px 20px 14px;
+      background: var(--parchment);
       position: sticky;
       top: 0;
       z-index: 20;
@@ -95,82 +144,86 @@
       border: none;
       cursor: pointer;
       font-family: 'Nunito', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      color: var(--navy);
+      color: var(--navy-ink);
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 0;
+      padding: 8px 12px;
+      margin: -8px -12px;
+      border-radius: var(--r-md);
+      transition: background .15s;
       touch-action: manipulation;
     }
+    .nav-back:hover  { background: var(--navy-ghost); }
+    .nav-back:active { background: var(--navy-ghost); transform: scale(0.96); }
 
-    .nav-back-icon {
-      font-size: 20px;
-      line-height: 1;
-    }
+    .nav-back-icon { font-size: 18px; line-height: 1; }
+    .nav-spacer    { flex: 1; }
 
-    .nav-spacer {
-      flex: 1;
-    }
-
-    /* ===========================
+    /* ============================================================
        TYPOGRAPHY
-    =========================== */
-    .hand {
-      font-family: 'Caveat', cursive;
-    }
+    ============================================================ */
+    .hand { font-family: 'Caveat', cursive; }
 
-    /* ===========================
+    /* ============================================================
        BUTTONS
-    =========================== */
+    ============================================================ */
     .btn {
       display: block;
       width: 100%;
       padding: 16px 24px;
-      border-radius: 50px;
+      border-radius: var(--r-full);
       border: none;
       font-family: 'Nunito', sans-serif;
-      font-size: 17px;
-      font-weight: 800;
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
       text-align: center;
-      transition: transform .12s, box-shadow .12s;
+      transition: all .15s var(--spring);
       touch-action: manipulation;
       letter-spacing: -.01em;
     }
 
-    .btn:active {
-      transform: scale(0.96);
+    /* Bouton héros — action principale de la home */
+    .btn-hero {
+      font-size: 17px;
+      font-weight: 800;
+      padding: 20px 28px;
+      background: var(--red-main);
+      color: #fff;
+      box-shadow: var(--sh-3);
     }
+    .btn-hero:hover  { background: var(--red-bright); transform: translateY(-2px); box-shadow: var(--sh-3); }
+    .btn-hero:active { transform: scale(0.95) translateY(1px); box-shadow: var(--sh-1); }
 
     .btn-primary {
-      background: var(--red);
+      background: var(--red-main);
       color: #fff;
-      box-shadow: 0 4px 0 var(--red-dark);
+      box-shadow: var(--sh-2);
     }
-
-    .btn-primary:active {
-      box-shadow: 0 2px 0 var(--red-dark);
-      transform: translateY(2px) scale(0.98);
-    }
+    .btn-primary:hover  { background: var(--red-bright); transform: translateY(-1px); box-shadow: var(--sh-3); }
+    .btn-primary:active { transform: scale(0.96); box-shadow: var(--sh-1); }
 
     .btn-secondary {
-      background: var(--gold);
+      background: var(--gold-main);
       color: #fff;
-      box-shadow: 0 4px 0 #B45309;
+      box-shadow: var(--sh-2);
     }
-
-    .btn-secondary:active {
-      box-shadow: 0 2px 0 #B45309;
-      transform: translateY(2px) scale(0.98);
-    }
+    .btn-secondary:hover  { background: var(--gold-warm); transform: translateY(-1px); box-shadow: var(--sh-3); }
+    .btn-secondary:active { transform: scale(0.96); box-shadow: var(--sh-1); }
 
     .btn-outline {
       background: transparent;
-      color: var(--navy);
-      border: 2.5px solid var(--navy);
+      color: var(--navy-ink);
+      border: 2px solid var(--parchment-deep);
+      box-shadow: none;
+      font-weight: 600;
+      font-size: 14px;
     }
+    .btn-outline:hover  { background: var(--parchment-deep); }
+    .btn-outline:active { transform: scale(0.96); }
 
     .btn:disabled {
       opacity: .5;
@@ -179,238 +232,286 @@
       box-shadow: none !important;
     }
 
-    /* ===========================
-       FORM ELEMENTS
-    =========================== */
-    .form-group {
-      margin-bottom: 14px;
-    }
+    /* ============================================================
+       FORM — inputs
+    ============================================================ */
+    .form-group   { margin-bottom: 0; }
 
     .form-label {
       display: block;
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 11px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: .09em;
-      color: var(--gray-text);
-      margin-bottom: 6px;
+      letter-spacing: .1em;
+      color: var(--navy-muted);
+      margin-bottom: 7px;
     }
 
     .form-input {
       width: 100%;
       padding: 14px 16px;
-      background: var(--white);
-      border: 1.5px solid var(--cream-dark);
-      border-radius: var(--radius-sm);
+      background: var(--surface);
+      border: 1.5px solid var(--parchment-deep);
+      border-radius: var(--r-md);
       font-family: 'Nunito', sans-serif;
-      font-size: 16px;
+      font-size: 15px;
       line-height: 1.5;
-      color: var(--navy);
+      color: var(--navy-ink);
       outline: none;
-      transition: border-color .2s;
+      transition: border-color .15s, box-shadow .15s;
       -webkit-appearance: none;
     }
-
+    .form-input:hover:not(:focus) { border-color: var(--navy-muted); }
     .form-input:focus {
-      border-color: var(--navy);
+      border-color: var(--red-main);
+      box-shadow: 0 0 0 3px rgba(184,44,44,.12);
     }
 
     .form-select {
       appearance: none;
       -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238A8078' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235B6B8A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 14px center;
       padding-right: 44px;
       cursor: pointer;
     }
 
-    /* ===========================
+    /* Card grouping des champs */
+    .form-card {
+      background: var(--surface);
+      border-radius: var(--r-lg);
+      box-shadow: var(--sh-2);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-card-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      color: var(--navy-muted);
+      margin-bottom: -4px;
+    }
+
+    /* ============================================================
        TOGGLE BUTTONS
-    =========================== */
+    ============================================================ */
     .toggle-group {
       display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
+      gap: 10px;
     }
 
     .toggle-btn {
       flex: 1;
-      padding: 11px 16px;
-      border-radius: 50px;
-      border: 2px solid var(--cream-dark);
-      background: var(--white);
+      padding: 12px 16px;
+      border-radius: var(--r-full);
+      border: 2px solid var(--parchment-deep);
+      background: var(--surface);
       font-family: 'Nunito', sans-serif;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      color: var(--gray-dark);
+      color: var(--navy-mid);
       cursor: pointer;
       transition: all .15s;
       touch-action: manipulation;
     }
+    .toggle-btn:hover   { border-color: var(--navy-muted); background: var(--parchment); }
+    .toggle-btn:active  { transform: scale(0.96); }
 
     .toggle-btn.active-gold {
-      background: var(--gold);
-      border-color: var(--gold);
+      background: var(--gold-main);
+      border-color: var(--gold-main);
       color: #fff;
     }
-
     .toggle-btn.active-red {
-      background: var(--red);
-      border-color: var(--red);
+      background: var(--red-main);
+      border-color: var(--red-main);
       color: #fff;
     }
 
-    /* ===========================
+    /* ============================================================
        SCREEN: HOME
-    =========================== */
-    #screen-home {
-      background: var(--cream);
-    }
+    ============================================================ */
+    #screen-home { background: var(--parchment); }
 
+    /* Bunting */
     .home-bunting {
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
-      padding: 0 4px;
-      height: 32px;
+      padding: 0 2px;
+      height: 36px;
       overflow: hidden;
     }
-
     .bunting-flag {
       width: 0;
       height: 0;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 18px solid;
-      position: relative;
+      border-left: 11px solid transparent;
+      border-right: 11px solid transparent;
+      border-top: 20px solid;
     }
+    .bunting-flag:nth-child(3n+1) { border-top-color: var(--red-main); }
+    .bunting-flag:nth-child(3n+2) { border-top-color: var(--gold-warm); }
+    .bunting-flag:nth-child(3n)   { border-top-color: var(--navy-ink); }
 
-    .bunting-flag:nth-child(odd) {
-      border-top-color: var(--red);
-    }
-
-    .bunting-flag:nth-child(3n) {
-      border-top-color: var(--gold);
-    }
-
-    .bunting-flag:nth-child(4n+1) {
-      border-top-color: var(--navy);
-    }
-
+    /* Hero */
     .home-hero {
       text-align: center;
-      padding: 12px 24px 0;
+      padding: 20px 24px 0;
     }
-
     .home-tent-wrap {
       display: flex;
       justify-content: center;
-      margin-bottom: 12px;
+      margin-bottom: 20px;
     }
-
     .home-title {
       font-family: 'Caveat', cursive;
-      font-size: 40px;
+      font-size: 44px;
       font-weight: 700;
-      color: var(--navy);
+      color: var(--navy-ink);
       line-height: 1;
     }
-
-    .home-date {
-      font-family: 'Caveat', cursive;
-      font-size: 21px;
-      color: var(--gray-dark);
-      margin: 4px 0 20px;
-    }
-
-    .home-banner {
-      background: var(--red);
-      color: #fff;
-      padding: 18px 24px;
-      text-align: center;
-    }
-
-    .home-banner-title {
-      font-family: 'Caveat', cursive;
-      font-size: 28px;
-      font-weight: 700;
-      line-height: 1.1;
-    }
-
-    .home-banner-sub {
+    .home-date-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--navy-ghost);
+      color: var(--navy-mid);
+      border-radius: var(--r-full);
       font-size: 13px;
-      font-weight: 600;
-      margin-top: 5px;
-      opacity: .9;
+      font-weight: 700;
+      padding: 6px 14px;
+      margin-top: 12px;
     }
 
-    .home-tagline {
-      text-align: center;
-      font-size: 15px;
+    /* Urgency card */
+    .home-urgency {
+      margin: 24px 20px 0;
+      background: var(--red-main);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      box-shadow: var(--sh-3);
+      overflow: hidden;
+      position: relative;
+    }
+    .home-urgency::before {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: -20px;
+      width: 100px;
+      height: 100px;
+      background: rgba(255,255,255,.06);
+      border-radius: 50%;
+    }
+    .home-urgency::after {
+      content: '';
+      position: absolute;
+      right: 20px;
+      bottom: -30px;
+      width: 70px;
+      height: 70px;
+      background: rgba(255,255,255,.04);
+      border-radius: 50%;
+    }
+    .home-urgency-count {
+      font-family: 'Caveat', cursive;
+      font-size: 56px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .home-urgency-body { flex: 1; position: relative; z-index: 1; }
+    .home-urgency-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,.95);
+      line-height: 1.3;
+    }
+    .home-urgency-sub {
+      font-size: 12px;
       font-weight: 600;
-      color: var(--navy);
-      padding: 14px 24px 20px;
-      font-style: italic;
+      color: rgba(255,255,255,.65);
+      margin-top: 4px;
     }
 
+    /* Actions */
     .home-actions {
-      padding: 0 24px;
+      padding: 24px 20px 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
-
-    .home-actions .btn-primary:first-of-type {
-      font-size: 18px;
-      padding: 18px 24px;
-    }
-
-    .home-footer {
-      margin-top: auto;
-      padding: 28px 24px 24px;
-      text-align: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--gray-text);
-      text-transform: uppercase;
-      letter-spacing: .12em;
+    .home-actions-sep {
+      height: 1px;
+      background: var(--parchment-deep);
+      margin: 4px 0;
     }
 
     /* Demo badge */
     .demo-badge {
       display: inline-block;
-      background: var(--gold-light);
-      color: var(--gold);
-      border: 1.5px solid var(--gold);
-      border-radius: 50px;
+      background: var(--gold-tint);
+      color: var(--gold-main);
+      border: 1.5px solid var(--gold-warm);
+      border-radius: var(--r-full);
       font-size: 11px;
       font-weight: 700;
-      padding: 3px 10px;
-      margin-bottom: 10px;
+      padding: 4px 12px;
+      text-align: center;
+      letter-spacing: .04em;
     }
 
-    /* ===========================
-       SCREEN: GRID
-    =========================== */
-    #screen-grid {
-      padding: 0;
+    /* Footer */
+    .home-footer {
+      margin-top: auto;
+      padding: 32px 24px 24px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy-muted);
+      text-transform: uppercase;
+      letter-spacing: .12em;
     }
 
-    .grid-header {
-      padding: 4px 20px 14px;
+    /* ============================================================
+       SCREEN: GRILLE
+    ============================================================ */
+    #screen-grid { padding: 0; }
+
+    .grid-head-zone {
+      background: var(--navy-ink);
+      padding: 0 24px 20px;
     }
+    .grid-head-zone .nav-bar {
+      background: transparent;
+    }
+    .grid-head-zone .nav-back {
+      color: rgba(255,255,255,.85);
+    }
+    .grid-head-zone .nav-back:hover  { background: rgba(255,255,255,.1); }
+    .grid-head-zone .nav-back:active { background: rgba(255,255,255,.1); }
 
     .grid-title {
       font-family: 'Caveat', cursive;
-      font-size: 34px;
+      font-size: 36px;
       font-weight: 700;
+      color: #fff;
     }
-
     .grid-subtitle {
       font-size: 13px;
-      color: var(--gray-dark);
-      margin-top: 2px;
+      font-weight: 600;
+      color: rgba(255,255,255,.55);
+      margin-top: 4px;
     }
 
     .grid-scroll {
@@ -426,53 +527,44 @@
     }
 
     .grid-tbl thead th {
-      padding: 10px 6px;
-      font-size: 13px;
+      padding: 12px 6px;
+      font-size: 12px;
       font-weight: 800;
       text-align: center;
-      background: var(--cream);
+      background: var(--parchment-deep);
       position: sticky;
       top: 0;
       z-index: 5;
+      color: var(--navy-mid);
+      letter-spacing: .06em;
+      text-transform: uppercase;
     }
-
     .grid-tbl thead th.col-stand {
       text-align: left;
       padding-left: 20px;
       font-family: 'Caveat', cursive;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
-      color: var(--gold);
-      min-width: 130px;
+      color: var(--gold-main);
+      min-width: 150px;
+      text-transform: none;
+      letter-spacing: 0;
     }
+    .grid-tbl thead th.col-slot { min-width: 76px; }
 
-    .grid-tbl thead th.col-slot {
-      min-width: 72px;
-      color: var(--navy);
-    }
-
-    .grid-tbl thead th.col-slot::before {
-      content: '';
-    }
-
-    .grid-tbl tbody tr {
-      border-bottom: 1px solid var(--cream-dark);
-    }
-
-    .grid-tbl tbody tr:last-child {
-      border-bottom: none;
-    }
+    .grid-tbl tbody tr:nth-child(even) { background: rgba(237,229,208,.35); }
+    .grid-tbl tbody tr { border-bottom: 1px solid rgba(20,30,53,.07); }
+    .grid-tbl tbody tr:last-child { border-bottom: none; }
 
     .grid-tbl tbody td.td-name {
-      padding: 10px 8px 10px 20px;
+      padding: 11px 8px 11px 20px;
       font-size: 13px;
       font-weight: 700;
-      color: var(--navy);
+      color: var(--navy-ink);
       line-height: 1.3;
     }
-
     .grid-tbl tbody td.td-slot {
-      padding: 6px 5px;
+      padding: 8px 4px;
       text-align: center;
     }
 
@@ -480,70 +572,73 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 62px;
+      width: 64px;
       height: 42px;
-      border-radius: var(--radius-sm);
+      border-radius: var(--r-md);
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
-      transition: transform .1s;
+      transition: all .12s var(--spring);
       touch-action: manipulation;
+      box-shadow: var(--sh-2);
     }
-
-    .cell:active {
-      transform: scale(.92);
-    }
+    .cell:active { transform: scale(0.90); box-shadow: var(--sh-1); }
 
     .cell-locked {
       background: transparent;
-      color: var(--gray-text);
+      color: var(--parchment-deep);
       cursor: default;
       font-size: 18px;
+      box-shadow: none;
     }
-
     .cell-full {
-      background: var(--green);
+      background: var(--green-main);
       color: #fff;
       cursor: default;
-      font-weight: 800;
     }
-
     .cell-1left {
-      background: var(--gold);
+      background: var(--gold-main);
       color: #fff;
+      position: relative;
     }
-
+    .cell-1left::after {
+      content: '';
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+      opacity: .8;
+    }
     .cell-open {
-      background: var(--red);
+      background: var(--red-main);
       color: #fff;
     }
 
     .grid-more {
       text-align: center;
-      padding: 14px 16px 20px;
+      padding: 16px 24px 24px;
       font-size: 12px;
       font-weight: 700;
-      color: var(--gray-text);
+      color: var(--navy-muted);
       letter-spacing: .08em;
     }
 
-    /* ===========================
+    /* ============================================================
        BOTTOM SHEET
-    =========================== */
+    ============================================================ */
     .backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(26, 39, 68, .42);
+      background: rgba(20,30,53,.35);
       z-index: 50;
       opacity: 0;
       pointer-events: none;
-      transition: opacity .28s;
+      transition: opacity .25s;
     }
-
-    .backdrop.open {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .backdrop.open { opacity: 1; pointer-events: all; }
 
     .b-sheet {
       position: fixed;
@@ -552,61 +647,50 @@
       transform: translateX(-50%) translateY(110%);
       width: 100%;
       max-width: 430px;
-      background: var(--cream);
-      border-radius: 24px 24px 0 0;
+      background: var(--surface);
+      border-radius: 28px 28px 0 0;
       z-index: 51;
-      transition: transform .32s cubic-bezier(.32, .72, 0, 1);
+      transition: transform .36s var(--spring-heavy);
       max-height: 88vh;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px);
+      box-shadow: var(--sh-4);
     }
-
-    .b-sheet.open {
-      transform: translateX(-50%) translateY(0);
-    }
+    .b-sheet.open { transform: translateX(-50%) translateY(0); }
 
     .sheet-handle {
-      width: 40px;
+      width: 36px;
       height: 4px;
-      background: var(--cream-dark);
+      background: var(--parchment-deep);
       border-radius: 2px;
-      margin: 14px auto 22px;
-      position: relative;
+      margin: 14px auto 18px;
     }
 
-    .sheet-handle::after {
-      content: '↓';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 14px;
-      color: var(--gray-text);
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .sheet-head {
-      padding: 0 24px 16px;
-    }
+    .sheet-head { padding: 0 24px 20px; }
 
     .sheet-loc {
       font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: .1em;
-      color: var(--gray-text);
-      margin-bottom: 6px;
+      color: var(--navy-muted);
+      margin-bottom: 8px;
+    }
+
+    .sheet-title {
+      font-family: 'Caveat', cursive;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--navy-ink);
+      line-height: 1.1;
     }
 
     .sheet-places {
       font-size: 15px;
-      color: var(--gray-dark);
-      margin-top: 8px;
+      color: var(--navy-mid);
+      font-weight: 600;
+      margin-top: 10px;
     }
 
     .sheet-people {
@@ -617,60 +701,49 @@
     }
 
     .person-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      box-shadow: var(--shadow);
+      background: var(--navy-ghost);
+      border-radius: var(--r-md);
+      padding: 13px 16px;
+      border-left: 3px solid var(--navy-mid);
     }
-
-    .person-name {
-      font-weight: 700;
-      font-size: 16px;
-    }
-
-    .person-child {
-      font-size: 13px;
-      color: var(--gray-dark);
-      margin-top: 2px;
-    }
+    .person-name  { font-weight: 700; font-size: 15px; color: var(--navy-ink); }
+    .person-child { font-size: 13px; color: var(--navy-muted); margin-top: 3px; font-weight: 500; }
 
     .open-card {
-      background: var(--gold-light);
-      border: 2px dashed var(--gold);
-      border-radius: var(--radius);
-      padding: 14px 18px;
+      background: var(--gold-tint);
+      border: 2px dashed var(--gold-warm);
+      border-radius: var(--r-md);
+      padding: 14px 16px;
       cursor: pointer;
       touch-action: manipulation;
-      transition: background .15s;
+      transition: all .12s var(--spring);
     }
+    .open-card:active { background: #FDE9BC; transform: scale(0.97); }
+    .open-card-label  { font-weight: 800; font-size: 15px; color: var(--gold-ink); }
+    .open-card-sub    { font-size: 13px; color: var(--gold-main); font-weight: 600; margin-top: 2px; }
 
-    .open-card:active {
-      background: #FDE68A;
-    }
+    .sheet-cta { padding: 18px 24px 8px; }
 
-    .open-card-label {
-      font-weight: 800;
-      font-size: 16px;
-      color: var(--gold);
-    }
-
-    .open-card-sub {
-      font-size: 13px;
-      color: var(--gold);
-      font-weight: 500;
-      margin-top: 1px;
-    }
-
-    .sheet-cta {
-      padding: 20px 24px 8px;
-    }
-
-    /* ===========================
-       SCREEN: FORM STAND
-    =========================== */
+    /* ============================================================
+       SCREEN: FORM STAND / GATEAU
+    ============================================================ */
     .form-body {
-      padding: 4px 24px 32px;
+      padding: 8px 20px 40px;
       flex: 1;
+    }
+
+    .form-context-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--red-tint);
+      border: 1px solid rgba(184,44,44,.2);
+      border-radius: var(--r-full);
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--red-main);
+      margin-bottom: 20px;
     }
 
     .form-hed {
@@ -678,241 +751,261 @@
       font-size: 34px;
       font-weight: 700;
       line-height: 1.1;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      color: var(--navy-ink);
     }
-
     .form-sub {
       font-size: 14px;
-      color: var(--gray-dark);
-      margin-bottom: 26px;
+      color: var(--navy-muted);
+      margin-bottom: 24px;
       font-style: italic;
-      line-height: 1.5;
+      line-height: 1.6;
     }
-
     .form-section {
       font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: .09em;
-      color: var(--gray-text);
+      letter-spacing: .1em;
+      color: var(--navy-muted);
       margin: 20px 0 10px;
     }
 
-    /* ===========================
+    /* ============================================================
        SCREEN: SUCCESS
-    =========================== */
+    ============================================================ */
     #screen-success {
       align-items: center;
       justify-content: center;
+      padding: 40px 24px;
+      background: linear-gradient(160deg, var(--parchment) 0%, #F5EDE6 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Confetti CSS */
+    .confetti-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .cc {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 2px;
+      animation: cc-fall linear forwards;
+      opacity: 0;
+    }
+    @keyframes cc-fall {
+      0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    .success-card {
+      background: var(--surface);
+      border-radius: var(--r-xl);
+      box-shadow: var(--sh-3);
+      padding: 36px 28px 32px;
       text-align: center;
-      padding: 48px 32px;
+      width: 100%;
+      max-width: 340px;
+      position: relative;
+      z-index: 1;
     }
 
     .success-icon {
-      font-size: 72px;
-      margin-bottom: 24px;
+      font-size: 64px;
       line-height: 1;
+      display: block;
+      margin-bottom: 20px;
+      animation: pop-in .5s var(--spring-heavy) both;
+    }
+    @keyframes pop-in {
+      from { transform: scale(0); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
     }
 
     .success-title {
       font-family: 'Caveat', cursive;
-      font-size: 40px;
+      font-size: 44px;
       font-weight: 700;
+      color: var(--navy-ink);
+      line-height: 1;
+      margin-bottom: 16px;
+      animation: slide-up .4s var(--ease-out) .1s both;
+    }
+
+    .success-summary {
+      display: inline-block;
+      background: var(--parchment);
+      border-radius: var(--r-md);
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--navy-mid);
       margin-bottom: 12px;
+      line-height: 1.5;
+      animation: slide-up .4s var(--ease-out) .18s both;
     }
 
     .success-text {
-      font-size: 16px;
-      color: var(--gray-dark);
-      line-height: 1.65;
-      margin-bottom: 36px;
-      max-width: 300px;
+      font-size: 14px;
+      color: var(--navy-muted);
+      line-height: 1.6;
+      animation: slide-up .4s var(--ease-out) .25s both;
     }
 
-    #success-btn {
+    @keyframes slide-up {
+      from { transform: translateY(12px); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    .success-actions {
+      margin-top: 28px;
+      width: 100%;
       max-width: 260px;
+      animation: slide-up .4s var(--ease-out) .35s both;
+      position: relative;
+      z-index: 1;
     }
 
-    /* ===========================
+    /* ============================================================
        SCREEN: MODIFY
-    =========================== */
-    .lookup-row {
-      display: flex;
-      gap: 8px;
-    }
-
-    .lookup-row .form-input {
-      flex: 1;
-    }
-
-    .lookup-row .btn {
-      width: auto;
-      padding: 14px 20px;
-      flex-shrink: 0;
-      font-size: 15px;
-    }
+    ============================================================ */
+    .lookup-row { display: flex; gap: 10px; }
+    .lookup-row .form-input { flex: 1; }
+    .lookup-row .btn { width: auto; padding: 14px 20px; flex-shrink: 0; font-size: 14px; }
 
     .modify-list {
-      margin-top: 24px;
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .modify-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 14px 16px;
+      background: var(--surface);
+      border-radius: var(--r-lg);
+      padding: 16px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      box-shadow: var(--shadow);
+      gap: 14px;
+      box-shadow: var(--sh-2);
+      border-left: 4px solid var(--red-main);
     }
+    .modify-card[data-type="gateau"] { border-left-color: var(--gold-main); }
 
-    .modify-card-info {
-      flex: 1;
-    }
-
+    .modify-card-info { flex: 1; }
     .modify-type {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: .09em;
-      color: var(--gray-text);
+      color: var(--navy-muted);
     }
-
-    .modify-main {
-      font-weight: 700;
-      font-size: 16px;
-      margin-top: 2px;
-    }
-
-    .modify-sub {
-      font-size: 13px;
-      color: var(--gray-dark);
-      margin-top: 1px;
-    }
+    .modify-main  { font-weight: 700; font-size: 16px; margin-top: 3px; color: var(--navy-ink); }
+    .modify-sub   { font-size: 13px; color: var(--navy-muted); margin-top: 3px; font-weight: 500; }
 
     .modify-del {
       background: none;
       border: none;
       cursor: pointer;
-      color: var(--gray-text);
-      font-size: 20px;
-      padding: 6px;
+      color: var(--navy-muted);
+      font-size: 18px;
+      width: 34px;
+      height: 34px;
+      border-radius: var(--r-sm);
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
       touch-action: manipulation;
-      line-height: 1;
-      border-radius: 50%;
-      transition: color .15s, background .15s;
     }
-
-    .modify-del:hover {
-      color: var(--red);
-      background: var(--red-light);
-    }
+    .modify-del:hover  { color: var(--red-main); background: var(--red-tint); }
+    .modify-del:active { transform: scale(0.9); }
 
     .modify-empty {
       text-align: center;
       padding: 32px 0;
-      color: var(--gray-text);
+      color: var(--navy-muted);
       font-size: 15px;
       display: none;
     }
-
     .modify-hint {
       text-align: center;
       font-size: 12px;
-      color: var(--gray-text);
-      margin-top: 16px;
+      color: var(--navy-muted);
+      margin-top: 20px;
       line-height: 1.6;
     }
 
-    /* ===========================
-       LOADING OVERLAY
-    =========================== */
+    /* ============================================================
+       LOADING
+    ============================================================ */
     #loading {
       position: fixed;
       inset: 0;
-      background: var(--cream);
+      background: var(--parchment);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 200;
-      gap: 18px;
+      gap: 20px;
       transition: opacity .25s;
     }
-
-    #loading.fade {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    #loading.gone {
-      display: none;
-    }
+    #loading.fade  { opacity: 0; pointer-events: none; }
+    #loading.gone  { display: none; }
 
     .spinner {
-      width: 38px;
-      height: 38px;
-      border: 3px solid var(--cream-dark);
-      border-top-color: var(--red);
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--parchment-deep);
+      border-top-color: var(--red-main);
       border-radius: 50%;
       animation: spin .75s linear infinite;
     }
-
-    @keyframes spin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     .loading-label {
       font-family: 'Caveat', cursive;
       font-size: 22px;
-      color: var(--gray-dark);
+      color: var(--navy-muted);
+      font-weight: 600;
     }
 
-    /* ===========================
+    /* ============================================================
        TOAST
-    =========================== */
+    ============================================================ */
     #toast {
       position: fixed;
       bottom: 90px;
       left: 50%;
-      transform: translateX(-50%) translateY(12px);
-      background: var(--navy);
+      transform: translateX(-50%) translateY(10px);
+      background: var(--navy-ink);
       color: #fff;
       padding: 11px 20px;
-      border-radius: 50px;
+      border-radius: var(--r-full);
       font-size: 14px;
       font-weight: 600;
       z-index: 300;
       opacity: 0;
-      transition: all .28s;
+      transition: all .26s var(--ease-out);
       white-space: nowrap;
       pointer-events: none;
+      box-shadow: var(--sh-3);
     }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    #toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    /* ===========================
+    /* ============================================================
        UTILS
-    =========================== */
-    .mt12 {
-      margin-top: 12px;
-    }
-
-    .mt20 {
-      margin-top: 20px;
-    }
-
-    .hidden {
-      display: none !important;
-    }
+    ============================================================ */
+    .mt12 { margin-top: 12px; }
+    .mt20 { margin-top: 20px; }
+    .hidden { display: none !important; }
   </style>
 </head>
 
@@ -935,7 +1028,7 @@
     <div class="sheet-handle"></div>
     <div class="sheet-head">
       <div class="sheet-loc" id="sheet-loc"></div>
-      <div class="hand" style="font-size:32px; font-weight:700; line-height:1.1;" id="sheet-title"></div>
+      <div class="sheet-title hand" id="sheet-title"></div>
       <div class="sheet-places" id="sheet-places"></div>
     </div>
     <div class="sheet-people" id="sheet-people"></div>
@@ -950,72 +1043,58 @@
 ========================= -->
   <div class="screen active" id="screen-home">
 
-    <!-- Bunting décoratif -->
     <div class="home-bunting" id="bunting-flags" aria-hidden="true"></div>
 
     <div class="home-hero">
-      <!-- Chapiteau SVG -->
       <div class="home-tent-wrap">
-        <svg width="170" height="108" viewBox="0 0 170 108" fill="none" xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true">
-          <!-- Corde bunting -->
-          <path d="M22 48 Q55 58 85 28 Q115 58 148 48" stroke="#D97706" stroke-width="1.5" fill="none"
-            stroke-dasharray="0" />
-          <!-- Fanions bunting -->
-          <polygon points="32,48 38,56 44,48" fill="#C53030" />
-          <polygon points="54,54 60,62 66,54" fill="#D97706" />
-          <polygon points="79,33 85,41 91,33" fill="#1A2744" />
-          <polygon points="104,54 110,62 116,54" fill="#C53030" />
-          <polygon points="126,49 132,57 138,49" fill="#D97706" />
-
-          <!-- Tente gauche -->
-          <polygon points="22,96 4,96 13,56" fill="#C53030" />
-          <polygon points="22,96 13,56 31,56" fill="#FBF5E6" />
-          <polygon points="31,56 40,96 22,96" fill="#C53030" />
-          <line x1="4" y1="96" x2="40" y2="96" stroke="#9B2C2C" stroke-width="1.5" />
-          <line x1="13" y1="56" x2="13" y2="44" stroke="#9B2C2C" stroke-width="1.5" />
-          <circle cx="13" cy="42" r="3.5" fill="#D97706" />
-
-          <!-- Tente centrale (grande) -->
-          <polygon points="85,96 52,96 68,30" fill="#C53030" />
-          <polygon points="85,96 68,30 102,30" fill="#FBF5E6" />
-          <polygon points="102,30 118,96 85,96" fill="#C53030" />
-          <line x1="52" y1="96" x2="118" y2="96" stroke="#9B2C2C" stroke-width="1.5" />
-          <line x1="68" y1="30" x2="68" y2="14" stroke="#9B2C2C" stroke-width="1.5" />
-          <!-- Drapeau central -->
-          <polygon points="68,6 62,15 74,15" fill="#D97706" />
-          <!-- Rayures porte -->
-          <rect x="76" y="74" width="18" height="22" rx="9" fill="#9B2C2C" opacity=".5" />
-
-          <!-- Tente droite -->
-          <polygon points="148,96 130,96 139,56" fill="#C53030" />
-          <polygon points="148,96 139,56 157,56" fill="#FBF5E6" />
-          <polygon points="157,56 166,96 148,96" fill="#C53030" />
-          <line x1="130" y1="96" x2="166" y2="96" stroke="#9B2C2C" stroke-width="1.5" />
-          <line x1="157" y1="56" x2="157" y2="44" stroke="#9B2C2C" stroke-width="1.5" />
-          <circle cx="157" cy="42" r="3.5" fill="#D97706" />
-
-          <!-- Sol -->
-          <line x1="2" y1="98" x2="168" y2="98" stroke="#9B2C2C" stroke-width="2" opacity=".3" />
+        <svg width="170" height="108" viewBox="0 0 170 108" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M22 48 Q55 58 85 28 Q115 58 148 48" stroke="#C47A1A" stroke-width="1.5" fill="none" />
+          <polygon points="32,48 38,56 44,48" fill="#B82C2C" />
+          <polygon points="54,54 60,62 66,54" fill="#C47A1A" />
+          <polygon points="79,33 85,41 91,33" fill="#141E35" />
+          <polygon points="104,54 110,62 116,54" fill="#B82C2C" />
+          <polygon points="126,49 132,57 138,49" fill="#C47A1A" />
+          <polygon points="22,96 4,96 13,56" fill="#B82C2C" />
+          <polygon points="22,96 13,56 31,56" fill="#F7F1E3" />
+          <polygon points="31,56 40,96 22,96" fill="#B82C2C" />
+          <line x1="4" y1="96" x2="40" y2="96" stroke="#8C1F1F" stroke-width="1.5" />
+          <line x1="13" y1="56" x2="13" y2="44" stroke="#8C1F1F" stroke-width="1.5" />
+          <circle cx="13" cy="42" r="3.5" fill="#C47A1A" />
+          <polygon points="85,96 52,96 68,30" fill="#B82C2C" />
+          <polygon points="85,96 68,30 102,30" fill="#F7F1E3" />
+          <polygon points="102,30 118,96 85,96" fill="#B82C2C" />
+          <line x1="52" y1="96" x2="118" y2="96" stroke="#8C1F1F" stroke-width="1.5" />
+          <line x1="68" y1="30" x2="68" y2="14" stroke="#8C1F1F" stroke-width="1.5" />
+          <polygon points="68,6 62,15 74,15" fill="#C47A1A" />
+          <rect x="76" y="74" width="18" height="22" rx="9" fill="#8C1F1F" opacity=".45" />
+          <polygon points="148,96 130,96 139,56" fill="#B82C2C" />
+          <polygon points="148,96 139,56 157,56" fill="#F7F1E3" />
+          <polygon points="157,56 166,96 148,96" fill="#B82C2C" />
+          <line x1="130" y1="96" x2="166" y2="96" stroke="#8C1F1F" stroke-width="1.5" />
+          <line x1="157" y1="56" x2="157" y2="44" stroke="#8C1F1F" stroke-width="1.5" />
+          <circle cx="157" cy="42" r="3.5" fill="#C47A1A" />
+          <line x1="2" y1="98" x2="168" y2="98" stroke="#8C1F1F" stroke-width="2" opacity=".25" />
         </svg>
       </div>
 
       <h1 class="home-title">Kermesse 2026</h1>
-      <p class="home-date" id="home-date">vendredi 26 juin · 16h45</p>
+      <div class="home-date-pill" id="home-date">vendredi 26 juin · 16h45</div>
     </div>
 
-    <div class="home-banner">
-      <div class="home-banner-title" id="home-banner-title">On a besoin de vous !</div>
-      <div class="home-banner-sub" id="home-banner-sub">Chargement…</div>
+    <!-- Urgency card -->
+    <div class="home-urgency" id="home-urgency">
+      <div class="home-urgency-count" id="home-count">—</div>
+      <div class="home-urgency-body">
+        <div class="home-urgency-label">bénévoles encore nécessaires</div>
+        <div class="home-urgency-sub" id="home-banner-sub">chargement…</div>
+      </div>
     </div>
-
-    <p class="home-tagline">Une grille, une case, un tap. C'est tout.</p>
 
     <div class="home-actions">
       <div id="demo-notice" class="demo-badge hidden">Mode démo — données simulées</div>
-      <button class="btn btn-primary" onclick="showGrid()">Je tiens un stand <span
-          style="opacity:.75;font-weight:600">(45 min)</span></button>
+      <button class="btn btn-hero" onclick="showGrid()">Je tiens un stand &thinsp;<span style="opacity:.65;font-weight:600;font-size:14px">(45 min)</span></button>
       <button class="btn btn-secondary" onclick="showScreen('screen-gateau')">J'apporte un gâteau</button>
+      <div class="home-actions-sep"></div>
       <button class="btn btn-outline" onclick="showScreen('screen-modify')">Modifier mon inscription</button>
     </div>
 
@@ -1027,16 +1106,15 @@
      SCREEN 2 · GRILLE
 ========================= -->
   <div class="screen" id="screen-grid">
-    <nav class="nav-bar">
-      <button class="nav-back" onclick="showScreen('screen-home')">
-        <span class="nav-back-icon">←</span> Accueil
-      </button>
-      <span class="nav-spacer"></span>
-    </nav>
-
-    <div class="grid-header">
+    <div class="grid-head-zone">
+      <nav class="nav-bar">
+        <button class="nav-back" onclick="showScreen('screen-home')">
+          <span class="nav-back-icon">←</span> Accueil
+        </button>
+        <span class="nav-spacer"></span>
+      </nav>
       <h2 class="hand grid-title">La grille</h2>
-      <p class="grid-subtitle">Une case = un créneau. Tap sur une case libre.</p>
+      <p class="grid-subtitle">Une case = un créneau · Tap sur une case libre</p>
     </div>
 
     <div class="grid-scroll">
@@ -1068,42 +1146,50 @@
     </nav>
 
     <div class="form-body">
+      <div class="form-context-pill" id="stand-context-pill" style="display:none">
+        📍 <span id="stand-context-text"></span>
+      </div>
       <h2 class="form-hed">Encore quelques infos</h2>
       <p class="form-sub" id="stand-sub">On a déjà ton créneau — il manque juste tes coordonnées.</p>
 
       <form id="form-stand" onsubmit="submitStand(event)">
-        <div class="form-group">
-          <label class="form-label">Prénom</label>
-          <input type="text" class="form-input" id="s-prenom" placeholder="Prénom" required autocomplete="given-name">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Nom</label>
-          <input type="text" class="form-input" id="s-nom" placeholder="Nom" required autocomplete="family-name">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Téléphone</label>
-          <input type="tel" class="form-input" id="s-tel" placeholder="06…" required autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Prénom enfant <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
-          <input type="text" class="form-input" id="s-enfant" placeholder="—" autocomplete="off">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Classe <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
-          <select class="form-input form-select" id="s-classe">
-            <option value="">—</option>
-            <option value="GS">GS</option>
-            <option value="CP">CP</option>
-            <option value="CE1">CE1</option>
-            <option value="CE2">CE2</option>
-            <option value="CM1">CM1</option>
-            <option value="CM2">CM2</option>
-          </select>
+        <div class="form-card">
+          <div class="form-card-label">Qui êtes-vous ?</div>
+          <div class="form-group">
+            <label class="form-label">Prénom</label>
+            <input type="text" class="form-input" id="s-prenom" placeholder="Prénom" required autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom</label>
+            <input type="text" class="form-input" id="s-nom" placeholder="Nom" required autocomplete="family-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Téléphone</label>
+            <input type="tel" class="form-input" id="s-tel" placeholder="06…" required autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
+          </div>
         </div>
 
-        <div class="mt20">
-          <button type="submit" class="btn btn-primary" id="s-submit">Valider</button>
+        <div class="form-card">
+          <div class="form-card-label">Votre enfant <span style="font-weight:500;opacity:.6">(facultatif)</span></div>
+          <div class="form-group">
+            <label class="form-label">Prénom enfant</label>
+            <input type="text" class="form-input" id="s-enfant" placeholder="—" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Classe</label>
+            <select class="form-input form-select" id="s-classe">
+              <option value="">—</option>
+              <option value="GS">GS</option>
+              <option value="CP">CP</option>
+              <option value="CE1">CE1</option>
+              <option value="CE2">CE2</option>
+              <option value="CM1">CM1</option>
+              <option value="CM2">CM2</option>
+            </select>
+          </div>
         </div>
+
+        <button type="submit" class="btn btn-primary" id="s-submit">Valider mon inscription</button>
       </form>
     </div>
   </div>
@@ -1125,54 +1211,58 @@
       <p class="form-sub">Pour la buvette — sucré ou salé, fait maison.</p>
 
       <form id="form-gateau" onsubmit="submitGateau(event)">
-        <div class="form-group">
-          <label class="form-label">Prénom — Nom</label>
-          <input type="text" class="form-input" id="g-prenomnom" placeholder="Prénom Nom" required autocomplete="name">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Téléphone</label>
-          <input type="tel" class="form-input" id="g-tel" placeholder="06…" required autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Prénom enfant <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
-          <input type="text" class="form-input" id="g-enfant" placeholder="—" autocomplete="off">
-        </div>
-
-        <p class="form-section">Type</p>
-        <div class="toggle-group">
-          <button type="button" class="toggle-btn active-gold" id="tg-sucre"
-            onclick="setGateauType('sucré')">Sucré</button>
-          <button type="button" class="toggle-btn" id="tg-sale" onclick="setGateauType('salé')">Salé</button>
+        <div class="form-card">
+          <div class="form-card-label">Qui apporte ?</div>
+          <div class="form-group">
+            <label class="form-label">Prénom — Nom</label>
+            <input type="text" class="form-input" id="g-prenomnom" placeholder="Prénom Nom" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Téléphone</label>
+            <input type="tel" class="form-input" id="g-tel" placeholder="06…" required autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prénom enfant <span style="font-weight:400;opacity:.6">(facultatif)</span></label>
+            <input type="text" class="form-input" id="g-enfant" placeholder="—" autocomplete="off">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Nom du gâteau</label>
-          <input type="text" class="form-input" id="g-nom" placeholder="Tarte aux pommes" required autocomplete="off">
+        <div class="form-card">
+          <div class="form-card-label">Le gâteau</div>
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <div class="toggle-group">
+              <button type="button" class="toggle-btn active-gold" id="tg-sucre" onclick="setGateauType('sucré')">Sucré</button>
+              <button type="button" class="toggle-btn" id="tg-sale" onclick="setGateauType('salé')">Salé</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nom du gâteau</label>
+            <input type="text" class="form-input" id="g-nom" placeholder="Tarte aux pommes" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Parts approx.</label>
+            <select class="form-input form-select" id="g-parts" required>
+              <option value="4">4 parts</option>
+              <option value="6">6 parts</option>
+              <option value="8" selected>8 parts</option>
+              <option value="10">10 parts</option>
+              <option value="12">12 parts</option>
+              <option value="16">16 parts</option>
+              <option value="20">20 parts ou +</option>
+            </select>
+          </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Parts approx.</label>
-          <select class="form-input form-select" id="g-parts" required>
-            <option value="4">4 parts</option>
-            <option value="6">6 parts</option>
-            <option value="8" selected>8 parts</option>
-            <option value="10">10 parts</option>
-            <option value="12">12 parts</option>
-            <option value="16">16 parts</option>
-            <option value="20">20 parts ou +</option>
-          </select>
+        <div class="form-card">
+          <div class="form-card-label">Dépôt</div>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn" id="tg-ven" onclick="setDepot('vendredi')">Vendredi soir</button>
+            <button type="button" class="toggle-btn active-gold" id="tg-sam" onclick="setDepot('samedi')">Samedi 16h</button>
+          </div>
         </div>
 
-        <p class="form-section">Dépôt</p>
-        <div class="toggle-group">
-          <button type="button" class="toggle-btn" id="tg-ven" onclick="setDepot('vendredi')">Vendredi soir</button>
-          <button type="button" class="toggle-btn active-gold" id="tg-sam" onclick="setDepot('samedi')">Samedi
-            16h</button>
-        </div>
-
-        <div class="mt12">
-          <button type="submit" class="btn btn-primary" id="g-submit">Je m'engage</button>
-        </div>
+        <button type="submit" class="btn btn-primary" id="g-submit">Je m'engage</button>
       </form>
     </div>
   </div>
@@ -1193,9 +1283,11 @@
       <h2 class="form-hed">Mon inscription</h2>
       <p class="form-sub">Entre ton numéro pour retrouver tes inscriptions.</p>
 
-      <div class="lookup-row">
-        <input type="tel" class="form-input" id="m-tel" placeholder="06…" autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
-        <button type="button" class="btn btn-primary" onclick="lookup()">Chercher</button>
+      <div class="form-card">
+        <div class="lookup-row">
+          <input type="tel" class="form-input" id="m-tel" placeholder="06…" autocomplete="tel" inputmode="tel" oninput="sanitizePhone(this)">
+          <button type="button" class="btn btn-primary" onclick="lookup()">Chercher</button>
+        </div>
       </div>
 
       <div class="modify-list hidden" id="modify-list"></div>
@@ -1211,10 +1303,18 @@
      SCREEN · SUCCÈS
 ========================= -->
   <div class="screen" id="screen-success">
-    <div class="success-icon" id="s-icon">🎉</div>
-    <h2 class="success-title" id="s-title">C'est noté !</h2>
-    <p class="success-text" id="s-text">Merci pour ton engagement. On se retrouve à la kermesse !</p>
-    <button class="btn btn-primary" id="success-btn" onclick="showScreen('screen-home')">Retour à l'accueil</button>
+    <div class="confetti-wrap" id="confetti-wrap" aria-hidden="true"></div>
+
+    <div class="success-card">
+      <span class="success-icon" id="s-icon">🎉</span>
+      <h2 class="success-title" id="s-title">C'est noté !</h2>
+      <div class="success-summary" id="s-summary"></div>
+      <p class="success-text" id="s-text">On se retrouve à la kermesse !</p>
+    </div>
+
+    <div class="success-actions">
+      <button class="btn btn-primary" id="success-btn" onclick="showScreen('screen-home')">Retour à l'accueil</button>
+    </div>
   </div>
 
 
@@ -1223,11 +1323,9 @@
 ==================================== -->
   <script>
     /* ======================================================
-       CONFIG — À personnaliser avant de mettre en prod
+       CONFIG
     ====================================================== */
     const CFG = {
-      // URL de ton Google Apps Script déployé.
-      // Laisse vide pour rester en mode démo.
       GAS_URL: 'https://script.google.com/macros/s/AKfycbwERiWWun0MV-QXQwQoXr5_3BjYifnpYBpXWwfDwtQYErSbC61zfnQiFE_FWiAmGoj1Rg/exec',
 
       EVENT: {
@@ -1244,136 +1342,31 @@
     ====================================================== */
     const MOCK = {
       ok: true,
-      stats: { inscrits: 42, total_places: 67, stands_incomplets: 9 },
+      stats: { inscrits: 42, total_places: 131, stands_incomplets: 9 },
       stands: [
-        {
-          id: 's0', nom: 'Caisse — Vente tickets',
-          slots: [
-            { c: '16h45', cap: 0, ins: 0, b: [] },
-            { c: '17h30', cap: 0, ins: 0, b: [] },
-            { c: '18h15', cap: 0, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's1', nom: 'Buvette',
-          slots: [
-            { c: '16h45', cap: 4, ins: 1, b: [{ p: 'Claire', n: 'Moreau', e: 'Paul', cl: 'CP' }] },
-            { c: '17h30', cap: 4, ins: 0, b: [] },
-            { c: '18h15', cap: 4, ins: 1, b: [{ p: 'Hélène', n: 'Petit', e: 'Lucie', cl: 'CE1' }] },
-          ]
-        },
-        {
-          id: 's2', nom: 'Chamboule-tout',
-          slots: [
-            { c: '16h45', cap: 2, ins: 2, b: [{ p: 'Marc', n: 'Dubois', e: 'Théo', cl: 'CM1' }, { p: 'Julie', n: 'Bernard', e: 'Lucie', cl: 'CE2' }] },
-            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Sophie', n: 'Laurent', e: '', cl: '' }] },
-            { c: '18h15', cap: 2, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's3', nom: 'Lancé tête de clown',
-          slots: [
-            { c: '16h45', cap: 2, ins: 0, b: [] },
-            { c: '17h30', cap: 2, ins: 0, b: [] },
-            { c: '18h15', cap: 2, ins: 1, b: [{ p: 'Antoine', n: 'Martin', e: 'Emma', cl: 'GS' }] },
-          ]
-        },
-        {
-          id: 's4', nom: 'Pêche aux canards',
-          slots: [
-            { c: '16h45', cap: 2, ins: 1, b: [{ p: 'Marie', n: 'Laurent', e: 'Léa', cl: 'CE2' }] },
-            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Sophie', n: 'Bernard', e: 'Tom', cl: 'CM1' }] },
-            { c: '18h15', cap: 2, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's5', nom: 'Maquillage',
-          slots: [
-            { c: '16h45', cap: 3, ins: 3, b: [{ p: 'Isabelle', n: 'Roux' }, { p: 'Nathalie', n: 'Simon' }, { p: 'Caroline', n: 'Dupont' }] },
-            { c: '17h30', cap: 3, ins: 1, b: [{ p: 'Laure', n: 'Girard', e: '', cl: '' }] },
-            { c: '18h15', cap: 3, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's6', nom: 'Stand créatif — clowns & masques',
-          slots: [
-            { c: '16h45', cap: 2, ins: 0, b: [] },
-            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Céline', n: 'Faure', e: '', cl: '' }] },
-            { c: '18h15', cap: 2, ins: 2, b: [{ p: 'Dominique', n: 'Thomas' }, { p: 'Véronique', n: 'Leroy' }] },
-          ]
-        },
-        {
-          id: 's7', nom: 'Toucher à l\'aveugle',
-          slots: [
-            { c: '16h45', cap: 0, ins: 0, b: [] },
-            { c: '17h30', cap: 0, ins: 0, b: [] },
-            { c: '18h15', cap: 0, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's8', nom: 'Grenouille tonneau',
-          slots: [
-            { c: '16h45', cap: 2, ins: 1, b: [{ p: 'Patrice', n: 'Michel', e: '', cl: '' }] },
-            { c: '17h30', cap: 2, ins: 0, b: [] },
-            { c: '18h15', cap: 2, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's9', nom: 'Jeu de massacre',
-          slots: [
-            { c: '16h45', cap: 2, ins: 0, b: [] },
-            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'François', n: 'Lambert', e: '', cl: '' }] },
-            { c: '18h15', cap: 2, ins: 2, b: [{ p: 'Pierre', n: 'Richard' }, { p: 'Sébastien', n: 'Morin' }] },
-          ]
-        },
-        {
-          id: 's10', nom: 'Tir à l\'arc — initiation',
-          slots: [
-            { c: '16h45', cap: 2, ins: 0, b: [] },
-            { c: '17h30', cap: 2, ins: 0, b: [] },
-            { c: '18h15', cap: 2, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's11', nom: 'Course en sac',
-          slots: [
-            { c: '16h45', cap: 2, ins: 1, b: [{ p: 'Sylvie', n: 'Blanc', e: '', cl: '' }] },
-            { c: '17h30', cap: 2, ins: 0, b: [] },
-            { c: '18h15', cap: 2, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's12', nom: 'Tombola — tirage',
-          slots: [
-            { c: '16h45', cap: 2, ins: 0, b: [] },
-            { c: '17h30', cap: 2, ins: 0, b: [] },
-            { c: '18h15', cap: 2, ins: 1, b: [{ p: 'Chloé', n: 'Renard', e: 'Nathan', cl: 'CP' }] },
-          ]
-        },
-        {
-          id: 's13', nom: 'Accueil & orientation',
-          slots: [
-            { c: '16h45', cap: 3, ins: 2, b: [{ p: 'Martine', n: 'Garnier' }, { p: 'Sandrine', n: 'Clement', e: 'Zoé', cl: 'CE2' }] },
-            { c: '17h30', cap: 3, ins: 0, b: [] },
-            { c: '18h15', cap: 3, ins: 0, b: [] },
-          ]
-        },
-        {
-          id: 's14', nom: 'Vente de glaces',
-          slots: [
-            { c: '16h45', cap: 2, ins: 0, b: [] },
-            { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Émilie', n: 'Favre', e: '', cl: '' }] },
-            { c: '18h15', cap: 2, ins: 0, b: [] },
-          ]
-        },
+        { id: 's0', nom: 'Caisse — Vente tickets', slots: [{ c: '16h45', cap: 0, ins: 0, b: [] }, { c: '17h30', cap: 0, ins: 0, b: [] }, { c: '18h15', cap: 0, ins: 0, b: [] }] },
+        { id: 's1', nom: 'Buvette', slots: [{ c: '16h45', cap: 4, ins: 1, b: [{ p: 'Claire', n: 'Moreau', e: 'Paul', cl: 'CP' }] }, { c: '17h30', cap: 4, ins: 0, b: [] }, { c: '18h15', cap: 4, ins: 1, b: [{ p: 'Hélène', n: 'Petit', e: 'Lucie', cl: 'CE1' }] }] },
+        { id: 's2', nom: 'Chamboule-tout', slots: [{ c: '16h45', cap: 2, ins: 2, b: [{ p: 'Marc', n: 'Dubois', e: 'Théo', cl: 'CM1' }, { p: 'Julie', n: 'Bernard', e: 'Lucie', cl: 'CE2' }] }, { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Sophie', n: 'Laurent', e: '', cl: '' }] }, { c: '18h15', cap: 2, ins: 0, b: [] }] },
+        { id: 's3', nom: 'Lancé tête de clown', slots: [{ c: '16h45', cap: 2, ins: 0, b: [] }, { c: '17h30', cap: 2, ins: 0, b: [] }, { c: '18h15', cap: 2, ins: 1, b: [{ p: 'Antoine', n: 'Martin', e: 'Emma', cl: 'GS' }] }] },
+        { id: 's4', nom: 'Pêche aux canards', slots: [{ c: '16h45', cap: 2, ins: 1, b: [{ p: 'Marie', n: 'Laurent', e: 'Léa', cl: 'CE2' }] }, { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Sophie', n: 'Bernard', e: 'Tom', cl: 'CM1' }] }, { c: '18h15', cap: 2, ins: 0, b: [] }] },
+        { id: 's5', nom: 'Maquillage', slots: [{ c: '16h45', cap: 3, ins: 3, b: [{ p: 'Isabelle', n: 'Roux' }, { p: 'Nathalie', n: 'Simon' }, { p: 'Caroline', n: 'Dupont' }] }, { c: '17h30', cap: 3, ins: 1, b: [{ p: 'Laure', n: 'Girard', e: '', cl: '' }] }, { c: '18h15', cap: 3, ins: 0, b: [] }] },
+        { id: 's6', nom: 'Stand créatif — clowns & masques', slots: [{ c: '16h45', cap: 2, ins: 0, b: [] }, { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Céline', n: 'Faure', e: '', cl: '' }] }, { c: '18h15', cap: 2, ins: 2, b: [{ p: 'Dominique', n: 'Thomas' }, { p: 'Véronique', n: 'Leroy' }] }] },
+        { id: 's7', nom: "Toucher à l'aveugle", slots: [{ c: '16h45', cap: 0, ins: 0, b: [] }, { c: '17h30', cap: 0, ins: 0, b: [] }, { c: '18h15', cap: 0, ins: 0, b: [] }] },
+        { id: 's8', nom: 'Grenouille tonneau', slots: [{ c: '16h45', cap: 2, ins: 1, b: [{ p: 'Patrice', n: 'Michel', e: '', cl: '' }] }, { c: '17h30', cap: 2, ins: 0, b: [] }, { c: '18h15', cap: 2, ins: 0, b: [] }] },
+        { id: 's9', nom: 'Jeu de massacre', slots: [{ c: '16h45', cap: 2, ins: 0, b: [] }, { c: '17h30', cap: 2, ins: 1, b: [{ p: 'François', n: 'Lambert', e: '', cl: '' }] }, { c: '18h15', cap: 2, ins: 2, b: [{ p: 'Pierre', n: 'Richard' }, { p: 'Sébastien', n: 'Morin' }] }] },
+        { id: 's10', nom: "Tir à l'arc — initiation", slots: [{ c: '16h45', cap: 2, ins: 0, b: [] }, { c: '17h30', cap: 2, ins: 0, b: [] }, { c: '18h15', cap: 2, ins: 0, b: [] }] },
+        { id: 's11', nom: 'Course en sac', slots: [{ c: '16h45', cap: 2, ins: 1, b: [{ p: 'Sylvie', n: 'Blanc', e: '', cl: '' }] }, { c: '17h30', cap: 2, ins: 0, b: [] }, { c: '18h15', cap: 2, ins: 0, b: [] }] },
+        { id: 's12', nom: 'Tombola — tirage', slots: [{ c: '16h45', cap: 2, ins: 0, b: [] }, { c: '17h30', cap: 2, ins: 0, b: [] }, { c: '18h15', cap: 2, ins: 1, b: [{ p: 'Chloé', n: 'Renard', e: 'Nathan', cl: 'CP' }] }] },
+        { id: 's13', nom: 'Accueil & orientation', slots: [{ c: '16h45', cap: 3, ins: 2, b: [{ p: 'Martine', n: 'Garnier' }, { p: 'Sandrine', n: 'Clement', e: 'Zoé', cl: 'CE2' }] }, { c: '17h30', cap: 3, ins: 0, b: [] }, { c: '18h15', cap: 3, ins: 0, b: [] }] },
+        { id: 's14', nom: 'Vente de glaces', slots: [{ c: '16h45', cap: 2, ins: 0, b: [] }, { c: '17h30', cap: 2, ins: 1, b: [{ p: 'Émilie', n: 'Favre', e: '', cl: '' }] }, { c: '18h15', cap: 2, ins: 0, b: [] }] },
       ],
     };
 
     /* ======================================================
        STATE
     ====================================================== */
-    let DATA = null;   // données chargées
-    let SEL = null;   // { stand, slot } sélectionnés
+    let DATA = null;
+    let SEL  = null;
     let GATEAU_TYPE = 'sucré';
     let DEPOT = 'samedi';
     const DEMO = !CFG.GAS_URL;
@@ -1392,18 +1385,15 @@
         return (Date.now() - ts < LS_TTL) ? data : null;
       } catch { return null; }
     }
-
     function cacheSave(data) {
-      try { localStorage.setItem(LS_KEY, JSON.stringify({ ts: Date.now(), data })); }
-      catch {}
+      try { localStorage.setItem(LS_KEY, JSON.stringify({ ts: Date.now(), data })); } catch {}
     }
-
     function cacheInvalidate() {
       try { localStorage.removeItem(LS_KEY); } catch {}
     }
 
     /* ======================================================
-       FORM DATA — sauvegarde locale (pour les inscriptions multiples)
+       FORM DATA — sauvegarde locale
     ====================================================== */
     const FORM_KEY = 'kermesse_form_data';
 
@@ -1423,25 +1413,23 @@
     function loadFormData() {
       try {
         const data = JSON.parse(localStorage.getItem(FORM_KEY)) || {};
-        const standPrenom = document.getElementById('s-prenom');
-        const standNom = document.getElementById('s-nom');
-        const standTel = document.getElementById('s-tel');
-        const standEnfant = document.getElementById('s-enfant');
-        const standClasse = document.getElementById('s-classe');
-        const gateauPrenomNom = document.getElementById('g-prenomnom');
-        const gateauTel = document.getElementById('g-tel');
-        const gateauEnfant = document.getElementById('g-enfant');
-
-        if (standPrenom && data.prenom) standPrenom.value = data.prenom;
-        if (standNom && data.nom) standNom.value = data.nom;
-        if (standTel && data.telephone) standTel.value = data.telephone;
-        if (standEnfant && data.prenomEnfant) standEnfant.value = data.prenomEnfant;
-        if (standClasse && data.classe) standClasse.value = data.classe;
-        if (gateauPrenomNom && data.prenom && data.nom) {
-          gateauPrenomNom.value = `${data.prenom} ${data.nom}`;
+        if (v('s-prenom') === '' && data.prenom)  document.getElementById('s-prenom').value = data.prenom;
+        if (v('s-nom')    === '' && data.nom)      document.getElementById('s-nom').value    = data.nom;
+        if (v('s-tel')    === '' && data.telephone) document.getElementById('s-tel').value   = data.telephone;
+        if (data.prenomEnfant) {
+          const se = document.getElementById('s-enfant');
+          const ge = document.getElementById('g-enfant');
+          if (se && !se.value) se.value = data.prenomEnfant;
+          if (ge && !ge.value) ge.value = data.prenomEnfant;
         }
-        if (gateauTel && data.telephone) gateauTel.value = data.telephone;
-        if (gateauEnfant && data.prenomEnfant) gateauEnfant.value = data.prenomEnfant;
+        if (data.classe) {
+          const sc = document.getElementById('s-classe');
+          if (sc && !sc.value) sc.value = data.classe;
+        }
+        const gp = document.getElementById('g-prenomnom');
+        const gt = document.getElementById('g-tel');
+        if (gp && !gp.value && data.prenom && data.nom) gp.value = `${data.prenom} ${data.nom}`;
+        if (gt && !gt.value && data.telephone) gt.value = data.telephone;
       } catch {}
     }
 
@@ -1460,15 +1448,14 @@
         return;
       }
 
-      // Affiche les données en cache immédiatement, rafraîchit en arrière-plan
       const cached = cacheLoad();
       if (cached) {
         DATA = cached;
         updateHomeStats();
         hideLoading();
-        fetchData(true); // silent background refresh
+        fetchData(true);
       } else {
-        fetchData(false); // premier chargement, spinner visible
+        fetchData(false);
       }
     });
 
@@ -1478,7 +1465,6 @@
     function showScreen(id) {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
-      // Auto-load form data pour les écrans de formulaire
       if (id === 'screen-gateau' || id === 'screen-stand') {
         setTimeout(loadFormData, 50);
       }
@@ -1499,7 +1485,6 @@
         DATA = fresh;
         cacheSave(fresh);
         updateHomeStats();
-        // Rerender grille si elle est visible
         if (document.getElementById('screen-grid').classList.contains('active')) {
           renderGrid();
         }
@@ -1513,7 +1498,6 @@
       if (!background) hideLoading();
     }
 
-    // JSONP — contourne le CORS de GAS (302 redirect)
     function fetchJSONP(url) {
       return new Promise((resolve, reject) => {
         const name = '__gcb' + Date.now();
@@ -1532,8 +1516,10 @@
       if (!DATA) return;
       const { inscrits, total_places, stands_incomplets } = DATA.stats;
       const manquants = total_places - inscrits;
-      document.getElementById('home-banner-sub').textContent =
-        `${manquants} bénévoles encore nécessaires · ${stands_incomplets} stands incomplets`;
+      const countEl = document.getElementById('home-count');
+      const subEl   = document.getElementById('home-banner-sub');
+      if (countEl) countEl.textContent = manquants;
+      if (subEl)   subEl.textContent   = `${stands_incomplets} stands incomplets`;
     }
 
     /* ======================================================
@@ -1555,7 +1541,6 @@
         stand.slots.forEach(slot => {
           const td = document.createElement('td');
           td.className = 'td-slot';
-
           const cell = document.createElement('div');
           cell.className = 'cell';
 
@@ -1580,9 +1565,7 @@
       });
 
       const more = document.getElementById('grid-more');
-      more.textContent = DATA.stands.length > 8
-        ? `↓ ${DATA.stands.length} stands au total ↓`
-        : '';
+      more.textContent = DATA.stands.length > 8 ? `↓ ${DATA.stands.length} stands au total` : '';
     }
 
     /* ======================================================
@@ -1596,15 +1579,10 @@
 
       document.getElementById('sheet-loc').textContent =
         `${stand.nom.toUpperCase()} · ${slot.c} → ${SLOT_ENDS[slot.c] || '…'}`;
-
       document.getElementById('sheet-title').textContent =
-        free === 1
-          ? `Il reste 1 place sur ${slot.cap}`
-          : `Il reste ${free} places sur ${slot.cap}`;
-
+        free === 1 ? `Il reste 1 place sur ${slot.cap}` : `Il reste ${free} places sur ${slot.cap}`;
       document.getElementById('sheet-places').textContent = '';
 
-      // Liste des bénévoles
       const peopleEl = document.getElementById('sheet-people');
       peopleEl.innerHTML = '';
 
@@ -1624,7 +1602,6 @@
         peopleEl.appendChild(card);
       });
 
-      // Cartes places libres (max 4 affichées)
       const shown = Math.min(free, 4 - (slot.b || []).length);
       for (let i = 0; i < Math.max(shown, 1); i++) {
         const card = document.createElement('div');
@@ -1643,11 +1620,8 @@
       document.getElementById('b-sheet').classList.remove('open');
     }
 
-    // Swipe down to close
     let _touchY = 0;
-    document.getElementById('b-sheet').addEventListener('touchstart', e => {
-      _touchY = e.touches[0].clientY;
-    }, { passive: true });
+    document.getElementById('b-sheet').addEventListener('touchstart', e => { _touchY = e.touches[0].clientY; }, { passive: true });
     document.getElementById('b-sheet').addEventListener('touchend', e => {
       if (e.changedTouches[0].clientY - _touchY > 90) closeSheet();
     }, { passive: true });
@@ -1659,6 +1633,14 @@
       closeSheet();
       if (!SEL) return;
       const { stand, slot } = SEL;
+
+      const pill = document.getElementById('stand-context-pill');
+      const pillText = document.getElementById('stand-context-text');
+      if (pill && pillText) {
+        pillText.textContent = `${stand.nom} — ${slot.c}`;
+        pill.style.display = 'inline-flex';
+      }
+
       document.getElementById('stand-sub').textContent =
         `${stand.nom} · ${slot.c} — il manque juste tes coordonnées.`;
       showScreen('screen-stand');
@@ -1667,11 +1649,10 @@
     async function submitStand(e) {
       e.preventDefault();
       const prenom = v('s-prenom');
-      const nom = v('s-nom');
-      const tel = v('s-tel');
+      const nom    = v('s-nom');
+      const tel    = v('s-tel');
       const enfant = v('s-enfant');
       const classe = v('s-classe');
-
       if (!prenom || !nom || !tel) return;
 
       const btn = document.getElementById('s-submit');
@@ -1686,20 +1667,19 @@
         creneau: SEL.slot.c,
       };
 
-      // Optimistic UI — succès immédiat, push en arrière-plan
-      resetBtn(btn, 'Valider');
+      resetBtn(btn, 'Valider mon inscription');
       cacheInvalidate();
       SEL.slot.ins++;
       SEL.slot.b.push({ p: prenom, n: nom, e: enfant, cl: classe });
       DATA.stats.inscrits++;
-      if (SEL.slot.ins < SEL.slot.cap) DATA.stats.stands_incomplets = Math.max(0, DATA.stats.stands_incomplets);
       updateHomeStats();
       saveFormData();
       document.getElementById('form-stand').reset();
-      showSuccess('🙌', 'Merci !',
-        `Tu es inscrit·e pour "${SEL.stand.nom}" à ${SEL.slot.c}.\nOn compte sur toi le ${CFG.EVENT.date.split('·')[0].trim()} !`);
 
-      // Envoie à GAS en arrière-plan (fire and forget)
+      showSuccess('🙌', 'Merci !',
+        `${SEL.stand.nom} · ${SEL.slot.c}`,
+        `On compte sur toi le ${CFG.EVENT.date.split('·')[0].trim()} !`);
+
       post(payload).catch(() => showToast('⚠️ Erreur de sauvegarde'));
     }
 
@@ -1709,23 +1689,22 @@
     function setGateauType(t) {
       GATEAU_TYPE = t;
       document.getElementById('tg-sucre').className = 'toggle-btn' + (t === 'sucré' ? ' active-gold' : '');
-      document.getElementById('tg-sale').className = 'toggle-btn' + (t === 'salé' ? ' active-gold' : '');
+      document.getElementById('tg-sale').className  = 'toggle-btn' + (t === 'salé'  ? ' active-gold' : '');
     }
 
     function setDepot(d) {
       DEPOT = d;
       document.getElementById('tg-ven').className = 'toggle-btn' + (d === 'vendredi' ? ' active-gold' : '');
-      document.getElementById('tg-sam').className = 'toggle-btn' + (d === 'samedi' ? ' active-gold' : '');
+      document.getElementById('tg-sam').className = 'toggle-btn' + (d === 'samedi'   ? ' active-gold' : '');
     }
 
     async function submitGateau(e) {
       e.preventDefault();
       const prenomNom = v('g-prenomnom');
-      const tel = v('g-tel');
-      const enfant = v('g-enfant');
+      const tel       = v('g-tel');
+      const enfant    = v('g-enfant');
       const nomGateau = v('g-nom');
-      const parts = v('g-parts');
-
+      const parts     = v('g-parts');
       if (!prenomNom || !tel || !nomGateau) return;
 
       const btn = document.getElementById('g-submit');
@@ -1741,17 +1720,17 @@
         depot: DEPOT,
       };
 
-      // Optimistic UI — succès immédiat, push en arrière-plan
-      resetBtn(btn, 'Je m\'engage');
+      resetBtn(btn, "Je m'engage");
       cacheInvalidate();
       saveFormData();
       document.getElementById('form-gateau').reset();
       setGateauType('sucré');
       setDepot('samedi');
-      showSuccess('🎂', 'Miam, merci !',
-        `Ton "${nomGateau}" (${GATEAU_TYPE}) est noté !\nDépôt : ${DEPOT === 'vendredi' ? 'vendredi soir' : 'samedi à 16h'}.`);
 
-      // Envoie à GAS en arrière-plan (fire and forget)
+      showSuccess('🎂', 'Miam, merci !',
+        `${nomGateau} · ${GATEAU_TYPE} · ${parts} parts`,
+        `Dépôt : ${DEPOT === 'vendredi' ? 'vendredi soir' : 'samedi à 16h'}.`);
+
       post(payload).catch(() => showToast('⚠️ Erreur de sauvegarde'));
     }
 
@@ -1764,7 +1743,6 @@
 
       const btn = document.querySelector('#screen-modify button[onclick="lookup()"]');
       setLoading(btn, 'Cherche…');
-
       document.getElementById('modify-list').classList.add('hidden');
       document.getElementById('modify-empty').classList.add('hidden');
       document.getElementById('modify-hint').classList.add('hidden');
@@ -1776,16 +1754,14 @@
           ok: true,
           inscriptions: tel === '0600000000'
             ? [
-              { id: 'demo1', type: 'stand', stand_nom: 'Buvette', creneau: '17h30' },
-              { id: 'demo2', type: 'gateau', nom_gateau: 'Tarte aux fraises', type_gateau: 'sucré', depot: 'samedi' },
-            ]
+                { id: 'demo1', type: 'stand',  stand_nom: 'Buvette', creneau: '17h30' },
+                { id: 'demo2', type: 'gateau', nom_gateau: 'Tarte aux fraises', type_gateau: 'sucré', depot: 'samedi' },
+              ]
             : [],
         };
       } else {
         try {
-          results = await fetchJSONP(
-            CFG.GAS_URL + '?action=lookup&telephone=' + encodeURIComponent(tel)
-          );
+          results = await fetchJSONP(CFG.GAS_URL + '?action=lookup&telephone=' + encodeURIComponent(tel));
         } catch {
           results = { ok: false };
         }
@@ -1804,14 +1780,15 @@
       results.inscriptions.forEach(ins => {
         const card = document.createElement('div');
         card.className = 'modify-card';
+        if (ins.type === 'gateau') card.dataset.type = 'gateau';
 
         const info = document.createElement('div');
         info.className = 'modify-card-info';
         info.innerHTML = `
-      <div class="modify-type">${ins.type === 'stand' ? 'Stand' : 'Gâteau'}</div>
-      <div class="modify-main">${ins.type === 'stand' ? ins.stand_nom : ins.nom_gateau}</div>
-      <div class="modify-sub">${ins.type === 'stand' ? ins.creneau : (ins.type_gateau + ' · dépôt ' + (ins.depot === 'vendredi' ? 'vendredi soir' : 'samedi'))}</div>
-    `;
+          <div class="modify-type">${ins.type === 'stand' ? 'Stand' : 'Gâteau'}</div>
+          <div class="modify-main">${ins.type === 'stand' ? ins.stand_nom : ins.nom_gateau}</div>
+          <div class="modify-sub">${ins.type === 'stand' ? ins.creneau : (ins.type_gateau + ' · dépôt ' + (ins.depot === 'vendredi' ? 'vendredi soir' : 'samedi'))}</div>
+        `;
 
         const del = document.createElement('button');
         del.className = 'modify-del';
@@ -1830,9 +1807,9 @@
 
     async function deleteIns(id, tel, cardEl, listEl) {
       if (!confirm('Supprimer cette inscription ?')) return;
-      // Animation immédiate (optimistic)
-      cardEl.style.transition = 'opacity .25s';
+      cardEl.style.transition = 'all .25s';
       cardEl.style.opacity = '0';
+      cardEl.style.transform = 'scale(0.94)';
       setTimeout(() => {
         cardEl.remove();
         if (!listEl.children.length) {
@@ -1842,37 +1819,49 @@
         }
       }, 260);
       showToast('✓ Inscription supprimée');
-      // Supprime du GAS en arrière-plan
       post({ action: 'delete', id, telephone: tel }).catch(() => showToast('⚠️ Erreur de suppression'));
     }
 
     /* ======================================================
-       API — tout via JSONP (GET) pour éviter les restrictions
-       CORS/no-cors depuis file:// et GitHub Pages
+       API
     ====================================================== */
     async function post(payload) {
-      if (DEMO) {
-        await delay(700);
-        return true;
-      }
+      if (DEMO) { await delay(700); return true; }
       try {
-        const data = await fetchJSONP(
-          CFG.GAS_URL + '?' + new URLSearchParams(payload)
-        );
+        const data = await fetchJSONP(CFG.GAS_URL + '?' + new URLSearchParams(payload));
         return data.ok === true && data.wrote === true;
-      } catch {
-        return false;
-      }
+      } catch { return false; }
     }
 
     /* ======================================================
        SUCCESS SCREEN
     ====================================================== */
-    function showSuccess(icon, title, text) {
-      document.getElementById('s-icon').textContent = icon;
-      document.getElementById('s-title').textContent = title;
-      document.getElementById('s-text').textContent = text;
+    function showSuccess(icon, title, summary, text) {
+      document.getElementById('s-icon').textContent    = icon;
+      document.getElementById('s-title').textContent   = title;
+      document.getElementById('s-summary').textContent = summary || '';
+      document.getElementById('s-text').textContent    = text || '';
       showScreen('screen-success');
+      spawnConfetti();
+    }
+
+    function spawnConfetti() {
+      const wrap   = document.getElementById('confetti-wrap');
+      wrap.innerHTML = '';
+      const colors = ['#B82C2C','#C47A1A','#E8912C','#141E35','#1A7A4A','#D04040','#FEF3DC'];
+      const count  = 40;
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'cc';
+        el.style.left            = Math.random() * 100 + '%';
+        el.style.background      = colors[Math.floor(Math.random() * colors.length)];
+        el.style.animationDuration = (1.8 + Math.random() * 2) + 's';
+        el.style.animationDelay  = (Math.random() * 0.8) + 's';
+        el.style.width           = (6 + Math.random() * 6) + 'px';
+        el.style.height          = (6 + Math.random() * 6) + 'px';
+        el.style.borderRadius    = Math.random() > 0.5 ? '50%' : '2px';
+        wrap.appendChild(el);
+      }
     }
 
     /* ======================================================
@@ -1893,19 +1882,12 @@
       _toastT = setTimeout(() => el.classList.remove('show'), 3200);
     }
 
-    function v(id) { return document.getElementById(id)?.value?.trim() ?? ''; }
-    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+    function v(id)       { return document.getElementById(id)?.value?.trim() ?? ''; }
+    function delay(ms)   { return new Promise(r => setTimeout(r, ms)); }
 
-    // Validation + masque téléphone : 06 12 34 56 78
     function sanitizePhone(input) {
-      // Enlever tout sauf les chiffres
-      let val = input.value.replace(/\D/g, '');
-      // Limiter à 10 chiffres
-      val = val.slice(0, 10);
-      // Appliquer le masque : XX XX XX XX XX
-      if (val.length > 0) {
-        val = val.replace(/(\d{2})(?=\d)/g, '$1 ');
-      }
+      let val = input.value.replace(/\D/g, '').slice(0, 10);
+      if (val.length > 0) val = val.replace(/(\d{2})(?=\d)/g, '$1 ');
       input.value = val;
     }
 
@@ -1920,10 +1902,10 @@
     }
 
     /* ======================================================
-       BUNTING DÉCORATIF
+       BUNTING
     ====================================================== */
     function buildBunting() {
-      const colors = ['#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706', '#1A2744', '#C53030', '#D97706'];
+      const colors = ['#B82C2C','#E8912C','#141E35','#B82C2C','#C47A1A','#141E35','#B82C2C','#E8912C','#141E35','#B82C2C','#C47A1A','#141E35','#B82C2C','#E8912C','#141E35','#B82C2C','#C47A1A','#141E35'];
       const wrap = document.getElementById('bunting-flags');
       colors.forEach(col => {
         const f = document.createElement('div');
