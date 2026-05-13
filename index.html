@@ -188,7 +188,7 @@
 
     .form-label {
       display: block;
-      font-size: 11px;
+      font-size: 13px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .09em;
@@ -204,6 +204,7 @@
       border-radius: var(--radius-sm);
       font-family: 'Nunito', sans-serif;
       font-size: 16px;
+      line-height: 1.5;
       color: var(--navy);
       outline: none;
       transition: border-color .2s;
@@ -346,8 +347,9 @@
 
     .home-tagline {
       text-align: center;
-      font-size: 14px;
-      color: var(--gray-dark);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--navy);
       padding: 14px 24px 20px;
       font-style: italic;
     }
@@ -357,6 +359,11 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+    }
+
+    .home-actions .btn-primary:first-of-type {
+      font-size: 18px;
+      padding: 18px 24px;
     }
 
     .home-footer {
@@ -459,7 +466,7 @@
     .grid-tbl tbody td.td-name {
       padding: 10px 8px 10px 20px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--navy);
       line-height: 1.3;
     }
@@ -473,8 +480,8 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 58px;
-      height: 36px;
+      width: 62px;
+      height: 42px;
       border-radius: var(--radius-sm);
       font-size: 13px;
       font-weight: 700;
@@ -565,6 +572,22 @@
       background: var(--cream-dark);
       border-radius: 2px;
       margin: 14px auto 22px;
+      position: relative;
+    }
+
+    .sheet-handle::after {
+      content: '↓';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      color: var(--gray-text);
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .sheet-head {
