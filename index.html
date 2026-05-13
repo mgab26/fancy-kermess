@@ -453,7 +453,7 @@
 
     .home-title {
       font-family: 'Gravitas One', cursive;
-      font-size: 44px;
+      font-size: 40px;
       font-weight: 700;
       color: var(--navy-ink);
       line-height: 1;
@@ -475,93 +475,55 @@
 
     /* Urgency card */
     .home-urgency {
-      margin: 24px 20px 0;
+      margin: 20px 20px 0;
       background: var(--parchment);
       border: 4px solid var(--navy-ink);
       border-radius: 8px;
-      padding: 14px 20px 16px;
+      padding: 14px 16px;
       position: relative;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
-
-    .home-urgency::before {
-      display: none;
+    .home-urgency::before { display: none; }
+    .home-urgency-left {
+      flex: 2;
+      border-right: 1.5px solid var(--navy-ink);
+      padding-right: 14px;
     }
-
-    .urg-corner {
-      position: absolute;
-      width: 13px;
-      height: 13px;
-    }
-
-    .urg-corner--tl {
-      top: 7px;
-      left: 7px;
-      border-top: 2px solid var(--navy-ink);
-      border-left: 2px solid var(--navy-ink);
-    }
-
-    .urg-corner--tr {
-      top: 7px;
-      right: 7px;
-      border-top: 2px solid var(--navy-ink);
-      border-right: 2px solid var(--navy-ink);
-    }
-
-    .urg-corner--bl {
-      bottom: 7px;
-      left: 7px;
-      border-bottom: 2px solid var(--navy-ink);
-      border-left: 2px solid var(--navy-ink);
-    }
-
-    .urg-corner--br {
-      bottom: 7px;
-      right: 7px;
-      border-bottom: 2px solid var(--navy-ink);
-      border-right: 2px solid var(--navy-ink);
-    }
-
     .home-urgency-title {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 800;
-      letter-spacing: .14em;
+      letter-spacing: .10em;
       text-transform: uppercase;
       color: var(--navy-ink);
-      padding-bottom: 10px;
-      margin-bottom: 10px;
-      border-bottom: 1px solid var(--navy-ink);
+      margin-bottom: 5px;
     }
-
-    .home-urgency-row {
-      display: none;
+    .home-urgency-desc {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy-ink);
+      line-height: 1.45;
     }
-
+    .home-urgency-kpi {
+      flex: 1;
+      text-align: center;
+    }
     .home-urgency-count {
       font-family: 'Gravitas One', cursive;
-      font-size: 64px;
+      font-size: 30px;
       color: var(--red-main);
       line-height: 1;
       display: block;
-      margin-bottom: 4px;
     }
-
-    .home-urgency-body {
-      text-align: center;
-    }
-
     .home-urgency-label {
-      font-size: 13px;
+      font-size: 10px;
       font-weight: 700;
       color: var(--navy-ink);
       line-height: 1.3;
-    }
-
-    .home-urgency-sub {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--navy-muted);
       margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
     }
 
     /* Actions */
@@ -1328,7 +1290,7 @@
 
     <div class="home-hero">
       <div class="home-tent-wrap">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.58 770.51" width="300" height="231"
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000.58 770.51" width="210" height="162"
           aria-hidden="true">
           <defs>
             <style>
@@ -1653,15 +1615,13 @@
 
     <!-- Urgency card -->
     <div class="home-urgency" id="home-urgency">
-      <span class="urg-corner urg-corner--tl"></span>
-      <span class="urg-corner urg-corner--tr"></span>
-      <span class="urg-corner urg-corner--bl"></span>
-      <span class="urg-corner urg-corner--br"></span>
-      <div class="home-urgency-title">On a besoin de vous !</div>
-      <div class="home-urgency-body">
-        <div class="home-urgency-count" id="home-count">—</div>
-        <div class="home-urgency-label">bénévoles encore nécessaires</div>
-        <div class="home-urgency-sub" id="home-banner-sub">chargement…</div>
+      <div class="home-urgency-left">
+        <div class="home-urgency-title">Plus on est, plus la fête est belle !</div>
+        <div class="home-urgency-desc">La kermesse vit grâce à vous, venez nous rejoindre sur nos stands !</div>
+      </div>
+      <div class="home-urgency-kpi">
+        <span class="home-urgency-count" id="home-count">—</span>
+        <div class="home-urgency-label">stands<br>complets</div>
       </div>
     </div>
 
@@ -2098,10 +2058,11 @@
       if (!DATA) return;
       const { inscrits, total_places, stands_incomplets } = DATA.stats;
       const manquants = total_places - inscrits;
+      const total_stands = DATA.stands.length;
+      const pct = total_stands ? Math.round((total_stands - stands_incomplets) / total_stands * 100) : 0;
       const countEl = document.getElementById('home-count');
-      const subEl = document.getElementById('home-banner-sub');
-      if (countEl) countEl.textContent = manquants;
-      if (subEl) subEl.textContent = `${stands_incomplets} stands incomplets`;
+      const descEl  = document.getElementById('home-urgency-desc');
+      if (countEl) countEl.textContent = pct + '%';
     }
 
     /* ======================================================
