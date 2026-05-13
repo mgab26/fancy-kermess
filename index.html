@@ -1873,9 +1873,17 @@
     function v(id) { return document.getElementById(id)?.value?.trim() ?? ''; }
     function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-    // Validation téléphone — seulement chiffres, espaces et tirets
+    // Validation + masque téléphone : 06 12 34 56 78
     function sanitizePhone(input) {
-      input.value = input.value.replace(/[^\d\s\-]/g, '');
+      // Enlever tout sauf les chiffres
+      let val = input.value.replace(/\D/g, '');
+      // Limiter à 10 chiffres
+      val = val.slice(0, 10);
+      // Appliquer le masque : XX XX XX XX XX
+      if (val.length > 0) {
+        val = val.replace(/(\d{2})(?=\d)/g, '$1 ');
+      }
+      input.value = val;
     }
 
     function setLoading(btn, label) {
